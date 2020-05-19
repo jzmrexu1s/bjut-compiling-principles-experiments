@@ -1885,9 +1885,14 @@ void myprint(int c){
 int main(void){
 	yyin=stdin;
 	int c;
-	while (c = yylex()){
-		myprint(c);
-	}
+    do {
+        c = yylex();
+        myprint(c);
+    }
+    while (c);
+	// while (c = yylex()){
+		// myprint(c);
+	// }
 	return 0;
 }
 
