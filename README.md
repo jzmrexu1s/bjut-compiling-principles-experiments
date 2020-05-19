@@ -10,3 +10,7 @@ lex t1_demo_lzh.lex
 gcc -o task1 lex.yy.c -lm  
 ./task1  
 ```
+Or execute generate_lex.sh, then:  
+```shell
+./task1  
+```
