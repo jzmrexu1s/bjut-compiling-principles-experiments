@@ -1,5 +1,7 @@
 # bjut-compiling-principles-experiments
 Coursework of compiling principles in BJUT. 
+## Environment
+Tested on Ubuntu 18.04.4 and macOS 10.15.4.
 ## Usage
 ### 实验一
 在/task1目录下：  
