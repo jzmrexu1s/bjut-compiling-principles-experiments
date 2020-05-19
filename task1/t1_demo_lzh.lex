@@ -29,10 +29,10 @@ hex		[0-9a-f]
 idn		{letter}({letter}|{digit})*([_.]({letter}|{digit})+)?
 int8	0[0-7]+
 int10	0|([1-9]{digit}*)
-int16	0x{hex}+
+int16	0X{hex}+
 float8	0[0-7]+[.][0-7]+
 float10	(0|[1-9]{digit}*)[.]{digit}+
-float16	0x{hex}+[.]{hex}+
+float16	0X{hex}+[.]{hex}+
 fuhao	[+]|[-]|[*]|[/]|[>]|[<]|[=]|[(]|[)]|[;]
 
 %%
@@ -173,7 +173,7 @@ char* fhtoa(char *p){
     int fcount = 0;
     int i = 0;
     float f = 0;
-	while (*p!='x') p ++;
+	while (*p!='X') p ++;
 	p ++;
     while (*p != '.') {
 		int tmp;
