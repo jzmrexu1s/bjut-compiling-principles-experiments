@@ -19,3 +19,13 @@ or
 or
 ./task1 in.txt chart.txt
 ```
+### Task2
+Under /task2t:  
+```shell
+make clean
+make all
+./task2  
+or:  
+./task2 in.txt  
+```
+Check out.txt to obtain result after execution if an argument has been passed.

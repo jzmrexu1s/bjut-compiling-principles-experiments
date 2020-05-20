@@ -1,26 +1,13 @@
-%option noyywrap
+%option noyywrap yylineno
 %{
 #include <stdio.h>
 #include <math.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <string.h>
+#include "parser.tab.h"
+void yyerror(char *s, ...);
 
 #define FUHAO 1
-#define IDN 2
-#define INT8 3
-#define INT10 4
-#define INT16 5
-#define FLOAT8 6
-#define FLOAT10 7
-#define FLOAT16 8
-
-#define IF 11
-#define THEN 12
-#define ELSE 13
-#define WHILE 14
-#define DO 15
-
-int yylval;
 %}
 
 digit	[0-9]
@@ -33,23 +20,20 @@ int16	0x{hex}+
 float8	0[0-7]+[.][0-7]+
 float10	(0|[1-9]{digit}*)[.]{digit}+
 float16	0x{hex}+[.]{hex}+
-fuhao	[+]|[-]|[*]|[/]|[>]|[<]|[=]|[(]|[)]|[;]
+fuhao	[+]|[-]|[*]|[/]|[>]|[<]|[=]|[(]|[)]|[;]|[{]|[}]
 
 %%
 
 while		{return WHILE;}
 if			{return IF;}
-then		{return ELSE;}
-else		{return WHILE;}
+then		{return THEN;}
+else		{return ELSE;}
 do			{return DO;}
-{fuhao}		{yylval=FUHAO;return yylval;}
-{idn}		{yylval=IDN;return yylval;}
-{int10}		{yylval=INT10;return yylval;}
-{int8}		{yylval=INT8;return yylval;}
-{int16}		{yylval=INT16;return yylval;}
-{float10}	{yylval=FLOAT10;return yylval;}
-{float8}	{yylval=FLOAT8;return yylval;}
-{float16}	{yylval=FLOAT16;return yylval;}
+{fuhao}		{return yytext[0];}
+{idn}		{yylval.strval = strdup(yytext); return IDN;}
+{int10}		{yylval.intval = atoi(yytext); return INT10;}
+{int8}		{yylval.intval = otoi(yytext); return INT8;}
+{int16}		{yylval.intval = htoi(yytext); return INT16;}
 
 .			{;}
 
@@ -61,32 +45,6 @@ char* itoa(int num,char *str);
 char* ftoa(float num,char *str);
 char* fotoa(char *p);
 char* fhtoa(char *p);
-void myprint(int c){
-	switch(c){
-		case FUHAO:printf("%s\t\t_\n",yytext);break;
-		case IDN:printf("IDN\t\t%s\n",yytext);break;
-		case INT8:printf("INT8\t\t%d\n",otoi(yytext));break;
-		case INT10:printf("INT10\t\t%d\n",atoi(yytext));break;
-		case INT16:printf("INT16\t\t%d\n",htoi(yytext));break;
-		case FLOAT8:printf("FLOAT8\t\t%s\n",fotoa(yytext));break;
-		case FLOAT10:printf("FLOAT10\t\t%g\n",atof(yytext));break;
-		case FLOAT16:printf("FLOAT16\t\t%s\n",fhtoa(yytext));break;
-		case WHILE:printf("WHILE\t\t_\n");break;
-		case IF:printf("IF\t\t_\n");break;
-		case THEN:printf("THEN\t\t_\n");break;
-		case ELSE:printf("ELSE\t\t_\n");break;
-		case DO:printf("DO\t\t_\n");break;
-	}
-}
-
-int main(void){
-	yyin=stdin;
-	int c;
-	while (c = yylex()){
-		myprint(c);
-	}
-	return 0;
-}
 
 char* itoa(int num,char *str)
 {
@@ -157,16 +115,9 @@ char* fotoa(char *p) {
     }
     for (int j = 0; j < fcount; j ++) {
         f *= 1000 / 8;
-		while (f > 17000000) f /= 10;
     }
-    char si[100];
-    char sf[100];
     char s[100];
-    itoa(i, si);
-    itoa(f, sf);
-    strcat(si, ".");
-    strcpy(s, si);
-    strcat(s, sf);
+    sprintf(s, "%d.%0*d", i, fcount*3, f);
     char* ps = s;
     return ps;
 }

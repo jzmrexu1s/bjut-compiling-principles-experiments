@@ -1,0 +1,55 @@
+P -> LP
+L -> S;
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> ( E )
+E -> + T
+E -> T
+T -> F
+F -> id	a3
+T -> F
+F -> int10	15
+C' -> > E
+E -> T
+T -> F
+F -> int16	10
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id	x2
+C' -> = E
+E -> T
+T -> F
+F -> int8	7
+S' -> S
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> id	y
+C' -> < E
+E -> T
+T -> F
+F -> id	z
+S -> id = E	
+E -> T
+T -> / F
+T -> * F
+T -> F
+F -> id	x
+F -> id	y
+F -> id	z
+P -> L
+L -> S;
+S -> id = E	
+E -> + T
+E -> T
+T -> * F
+T -> F
+F -> id	b
+F -> id	c
+T -> F
+F -> id	d
