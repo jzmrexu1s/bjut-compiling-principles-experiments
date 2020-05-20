@@ -1,7 +1,7 @@
 # bjut-compiling-principles-experiments
 Coursework of compiling principles in BJUT. 
 ## Environment
-Tested on Ubuntu 18.04.4 and macOS 10.15.4.
+Tested on Ubuntu 18.04.4 and macOS 10.15.4 with gcc (or clang), flex and bison installed. 
 ## Usage
 ### Task1
 Under /task1:  
