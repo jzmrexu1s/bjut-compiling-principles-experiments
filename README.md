@@ -14,4 +14,8 @@ Or:
 ```shell
 ./generate_lex.sh  
 ./task1  
+or
+./task1 in.txt
+or
+./task1 in.txt chart.txt
 ```
