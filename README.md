@@ -13,4 +13,8 @@ gcc -o task1 lex.yy.c -lm
 Or execute generate_lex.sh, then:  
 ```shell
 ./task1  
+or
+./task1 in.txt
+or
+./task1 in.txt chart.txt
 ```
