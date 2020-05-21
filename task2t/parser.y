@@ -17,12 +17,10 @@ struct ast *root;
 
 %union {
     int intval;
-    double floatval;
     char *strval;
-    struct ast *astinfo;
+    struct astNode *node;
 }
 
-	/* token 关键字 */
 %token WHILE
 %token IF
 %token THEN
@@ -37,52 +35,51 @@ struct ast *root;
 %left '+' '-'
 %left '*' '/'
 
-%type <astinfo> P L S SP C CP E T F
+%type <node> P L S SP C CP E T F
 
 %start P
 
 %%
 
-/* 语法规则 */
-P: L            { $$ = newast(1, NULL, $1, NULL); root = $$;}
- | L P          { $$ = newast(2, $1, NULL, $2); root = $$;}
+P: L            { $$ = createAstNode(1, NULL, $1, NULL); root = $$;}
+ | L P          { $$ = createAstNode(2, $1, NULL, $2); root = $$;}
  ;
 
-L: S ';'        { $$ = newast(3, NULL, $1, NULL); }
+L: S ';'        { $$ = createAstNode(3, NULL, $1, NULL); }
 ;
 
-S: IDN '=' E            { $$ = newastwithidn(4, $1, NULL, $3, NULL); }
- | IF C THEN SP       { $$ = newast(5, $2, NULL, $4); }
- | WHILE C DO S         { $$ = newast(6, $2, NULL, $4); }
- | '{' P '}'            { $$ = newast(7, NULL, $2, NULL); }
+S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); }
+ | IF C THEN SP       { $$ = createAstNode(5, $2, NULL, $4); }
+ | WHILE C DO S         { $$ = createAstNode(6, $2, NULL, $4); }
+ | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
  ;
 
-SP: S           { $$ = newast(8, NULL, $1, NULL); }
-  | S ELSE S    { $$ = newast(9, $1, NULL, $3); }
+SP: S           { $$ = createAstNode(8, NULL, $1, NULL); }
+  | S ELSE S    { $$ = createAstNode(9, $1, NULL, $3); }
 
-C: E CP         { $$ = newast(10, $1, NULL, $2); }
+C: E CP         { $$ = createAstNode(10, $1, NULL, $2); }
 ;
 
-CP: '>' E       { $$ = newast(11, NULL, $2, NULL); }
-  | '<' E       { $$ = newast(12, NULL, $2, NULL); }
-  | '=' E       { $$ = newast(13, NULL, $2, NULL); }
+CP: '>' E       { $$ = createAstNode(11, NULL, $2, NULL); }
+  | '<' E       { $$ = createAstNode(12, NULL, $2, NULL); }
+  | '=' E       { $$ = createAstNode(13, NULL, $2, NULL); }
   ;
 
-E: T            { $$ = newast(14, NULL, $1, NULL); }
-  | E '+' T     { $$ = newast(15, $1, NULL, $3); }
-  | E '-' T     { $$ = newast(16, $1, NULL, $3); }
+E: T            { $$ = createAstNode(14, NULL, $1, NULL); }
+  | E '+' T     { $$ = createAstNode(15, $1, NULL, $3); }
+  | E '-' T     { $$ = createAstNode(16, $1, NULL, $3); }
   ;
 
-T: F            { $$ = newast(17, NULL, $1, NULL); }
-  | T '*' F     { $$ = newast(18, $1, NULL, $3); }
-  | T '/' F     { $$ = newast(19, $1, NULL, $3); }
+T: F            { $$ = createAstNode(17, NULL, $1, NULL); }
+  | T '*' F     { $$ = createAstNode(18, $1, NULL, $3); }
+  | T '/' F     { $$ = createAstNode(19, $1, NULL, $3); }
   ;
 
-F: '(' E ')'    { $$ = newast(20, NULL, $2, NULL); }
-  | IDN         { $$ = newidn(21, $1); }
-  | INT8        { $$ = newnum(22, $1); }
-  | INT10       { $$ = newnum(23, $1); }
-  | INT16       { $$ = newnum(24, $1); }
+F: '(' E ')'    { $$ = createAstNode(20, NULL, $2, NULL); }
+  | IDN         { $$ = createIdn(21, $1); }
+  | INT8        { $$ = createNum(22, $1); }
+  | INT10       { $$ = createNum(23, $1); }
+  | INT16       { $$ = createNum(24, $1); }
   ;
 
 
@@ -90,8 +87,8 @@ F: '(' E ')'    { $$ = newast(20, NULL, $2, NULL); }
 
 int main(int argc, const char *args[])
 {
-	/* 将注释去掉就能看到stack具体是怎么工作的.. */
-    yydebug = 1;
+	/* 去除注释开启debug模式 */
+    /* yydebug = 1; */
 
 	extern FILE *yyin;
 
@@ -106,7 +103,7 @@ int main(int argc, const char *args[])
 
     FILE * f;
     f = fopen("out.txt", "w+");
-	displayAST(root, f);
+	printTree(root, f);
     return 0;
 }
 

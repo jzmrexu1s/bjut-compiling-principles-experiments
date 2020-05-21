@@ -69,12 +69,11 @@ typedef union YYSTYPE
 #line 18 "parser.y"
 {
     int intval;
-    double floatval;
     char *strval;
-    struct ast *astinfo;
+    struct astNode *node;
 }
 /* Line 1529 of yacc.c.  */
-#line 78 "parser.tab.h"
+#line 77 "parser.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

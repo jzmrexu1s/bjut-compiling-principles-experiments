@@ -2,70 +2,14 @@
 // Created by Chengwei Zhang on 5/21/20.
 //
 
-struct ast{
-    int expressionType;
-    int number;
-    struct ast *left;
-    struct ast *middle;
-    struct ast *right;
+struct astNode {
+    int pattern;
+    int num;
     char idn[5];
+    struct astNode *l;
+    struct astNode *m;
+    struct astNode *r;
 };
-
-struct ast *newastwithidn(int expressionType, struct ast *idn, struct ast *l, struct ast *m, struct ast *r)
-{
-    struct ast *a;
-    a = (struct ast*)malloc(sizeof(struct ast));
-    a->expressionType = expressionType;
-    a->number = -1;
-    strcpy(a -> idn, idn -> idn);
-    a->left = l;
-    a->middle = m;
-    a->right = r;
-    return a;
-
-}
-
-//一般建立节点的函数
-struct ast *newast(int expressionType, struct ast *l, struct ast *m, struct ast *r)
-{
-    struct ast *a;
-    a = (struct ast*)malloc(sizeof(struct ast));
-    a->expressionType = expressionType;
-    a->number = -1;
-    memset(a->idn, 0, sizeof(a->idn));
-    a->left = l;
-    a->middle = m;
-    a->right = r;
-    return a;
-}
-
-struct ast *newnum(int expressionType, double number)//建立数据型节点的函数
-{
-    struct ast *a;
-    a = (struct ast*)malloc(sizeof(struct ast));
-    a->expressionType = expressionType;
-    a->number = number;
-    memset(a->idn, 0, sizeof(a->idn));
-    a->left = NULL;
-    a->middle = NULL;
-    a->right = NULL;
-    return a;
-}
-
-struct ast *newidn(int expressionType, char *idn)//建立idn节点函数
-{
-
-    struct ast *a;
-    a = (struct ast*)malloc(sizeof(struct ast));
-    a->expressionType = expressionType;
-    a->number = -1;
-    strcpy(a -> idn, idn);
-    a->left = NULL;
-    a->middle = NULL;
-    a->right = NULL;
-
-    return a;
-}
 
 char* getPrintPattern(int type) {
     char *s;
@@ -98,29 +42,66 @@ char* getPrintPattern(int type) {
     return s;
 }
 
-void displayAST(struct ast* root, FILE* f) //以最左派生顺序输出结果
-{
-    if (root == NULL)
-    {
-        printf("root is NULL.\n");
-        return;
-    }
-    char* pattern = getPrintPattern(root -> expressionType);
-    fprintf(f, "%s", pattern);
-    if (root -> number != -1)
-    {
-        if (root -> expressionType >= 22 && root -> expressionType <= 24)
-            fprintf(f, "\t%d", (int)root -> number);
-    }
-    if (strlen(root -> idn) > 0)
-        fprintf(f, "\t%s", root -> idn);
+struct astNode *createNum(int pattern, double num) {
+    struct astNode *n;
+    n = (struct astNode*)malloc(sizeof(struct astNode));
+    n -> pattern = pattern;
+    n -> num = num;
+    memset(n -> idn, 0, sizeof(n -> idn));
+    n -> l = NULL;
+    n -> m = NULL;
+    n -> r = NULL;
+    return n;
+}
 
+struct astNode *createIdn(int pattern, char *idn) {
+    struct astNode *n;
+    n = (struct astNode *) malloc(sizeof(struct astNode));
+    n->pattern = pattern;
+    strcpy(n -> idn, idn);
+    n->l = NULL;
+    n->m = NULL;
+    n->r = NULL;
+    return n;
+}
+
+struct astNode *createAstNode(int pattern, struct astNode *l, struct astNode *m, struct astNode *r) {
+    struct astNode *n;
+    n = (struct astNode*)malloc(sizeof(struct astNode));
+    n -> pattern = pattern;
+    n -> num = -1;
+    memset(n -> idn, 0, sizeof(n -> idn));
+    n -> l = l;
+    n -> m = m;
+    n -> r = r;
+    return n;
+}
+
+struct astNode *createAstNodeIdn(int pattern, struct astNode *node, struct astNode *l, struct astNode *m, struct astNode *r) {
+    struct astNode *n;
+    n = (struct astNode*) malloc(sizeof(struct astNode));
+    n -> pattern = pattern;
+    n -> num = -1;
+    n -> l = l;
+    n -> m = m;
+    n -> r = r;
+    strcpy(n -> idn, node -> idn);
+    return n;
+
+}
+
+void printTree(struct astNode* root, FILE* f) {
+    if (root == NULL) return;
+    char* pattern = getPrintPattern(root -> pattern);
+    fprintf(f, "%s", pattern);
+    if (root -> pattern >= 22 && root -> pattern <= 24) fprintf(f, " : %d", (int)root -> num);
+    if (strlen(root -> idn) > 0) fprintf(f, " : %s", root -> idn);
     fprintf(f, "\n");
 
-    if (root -> left != NULL)
-        displayAST(root -> left, f);
-    if (root -> middle != NULL)
-        displayAST(root -> middle, f);
-    if (root -> right != NULL)
-        displayAST(root -> right, f);
+    if (root -> l != NULL)
+        printTree(root -> l, f);
+    if (root -> m != NULL)
+        printTree(root -> m, f);
+    if (root -> r != NULL)
+        printTree(root -> r, f);
 }
