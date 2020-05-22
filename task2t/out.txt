@@ -34,7 +34,7 @@ C' -> < E
 E -> T
 T -> F
 F -> id : z
-S -> id = E
+S -> id = E : y
 E -> T
 T -> / F
 T -> * F
@@ -44,7 +44,7 @@ F -> id : y
 F -> id : z
 P -> L
 L -> S;
-S -> id = E
+S -> id = E : c
 E -> + T
 E -> T
 T -> * F

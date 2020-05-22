@@ -77,7 +77,7 @@ struct astNode *createAstNode(int pattern, struct astNode *l, struct astNode *m,
     return n;
 }
 
-struct astNode *createAstNodeIdn(int pattern, struct astNode *node, struct astNode *l, struct astNode *m, struct astNode *r) {
+struct astNode *createAstNodeIdn(int pattern, char *idn, struct astNode *l, struct astNode *m, struct astNode *r) {
     struct astNode *n;
     n = (struct astNode*) malloc(sizeof(struct astNode));
     n -> pattern = pattern;
@@ -85,7 +85,7 @@ struct astNode *createAstNodeIdn(int pattern, struct astNode *node, struct astNo
     n -> l = l;
     n -> m = m;
     n -> r = r;
-    strcpy(n -> idn, node -> idn);
+    strcpy(n -> idn, idn);
     return n;
 
 }
