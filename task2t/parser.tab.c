@@ -92,7 +92,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 2 "parser.y"
+#line 3 "parser.y"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -102,7 +102,7 @@
 
 void yyerror(char *s, ...);
 int yylex();
-struct ast *root;
+struct astNode *root;
 
 
 /* Enabling traces.  */
@@ -125,7 +125,7 @@ struct ast *root;
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 18 "parser.y"
+#line 19 "parser.y"
 {
     int intval;
     char *strval;
@@ -450,9 +450,9 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    44,    44,    45,    48,    51,    52,    53,    54,    57,
-      58,    60,    63,    64,    65,    68,    69,    70,    73,    74,
-      75,    78,    79,    80,    81,    82
+       0,    45,    45,    46,    49,    52,    53,    54,    55,    58,
+      59,    61,    64,    65,    66,    69,    70,    71,    74,    75,
+      76,    79,    80,    81,    82,    83
 };
 #endif
 
@@ -1399,122 +1399,122 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 44 "parser.y"
+#line 45 "parser.y"
     { (yyval.node) = createAstNode(1, NULL, (yyvsp[(1) - (1)].node), NULL); root = (yyval.node);;}
     break;
 
   case 3:
-#line 45 "parser.y"
+#line 46 "parser.y"
     { (yyval.node) = createAstNode(2, (yyvsp[(1) - (2)].node), NULL, (yyvsp[(2) - (2)].node)); root = (yyval.node);;}
     break;
 
   case 4:
-#line 48 "parser.y"
+#line 49 "parser.y"
     { (yyval.node) = createAstNode(3, NULL, (yyvsp[(1) - (2)].node), NULL); ;}
     break;
 
   case 5:
-#line 51 "parser.y"
+#line 52 "parser.y"
     { (yyval.node) = createAstNodeIdn(4, (yyvsp[(1) - (3)].strval), NULL, (yyvsp[(3) - (3)].node), NULL); ;}
     break;
 
   case 6:
-#line 52 "parser.y"
+#line 53 "parser.y"
     { (yyval.node) = createAstNode(5, (yyvsp[(2) - (4)].node), NULL, (yyvsp[(4) - (4)].node)); ;}
     break;
 
   case 7:
-#line 53 "parser.y"
+#line 54 "parser.y"
     { (yyval.node) = createAstNode(6, (yyvsp[(2) - (4)].node), NULL, (yyvsp[(4) - (4)].node)); ;}
     break;
 
   case 8:
-#line 54 "parser.y"
+#line 55 "parser.y"
     { (yyval.node) = createAstNode(7, NULL, (yyvsp[(2) - (3)].node), NULL); ;}
     break;
 
   case 9:
-#line 57 "parser.y"
+#line 58 "parser.y"
     { (yyval.node) = createAstNode(8, NULL, (yyvsp[(1) - (1)].node), NULL); ;}
     break;
 
   case 10:
-#line 58 "parser.y"
+#line 59 "parser.y"
     { (yyval.node) = createAstNode(9, (yyvsp[(1) - (3)].node), NULL, (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 11:
-#line 60 "parser.y"
+#line 61 "parser.y"
     { (yyval.node) = createAstNode(10, (yyvsp[(1) - (2)].node), NULL, (yyvsp[(2) - (2)].node)); ;}
     break;
 
   case 12:
-#line 63 "parser.y"
+#line 64 "parser.y"
     { (yyval.node) = createAstNode(11, NULL, (yyvsp[(2) - (2)].node), NULL); ;}
     break;
 
   case 13:
-#line 64 "parser.y"
+#line 65 "parser.y"
     { (yyval.node) = createAstNode(12, NULL, (yyvsp[(2) - (2)].node), NULL); ;}
     break;
 
   case 14:
-#line 65 "parser.y"
+#line 66 "parser.y"
     { (yyval.node) = createAstNode(13, NULL, (yyvsp[(2) - (2)].node), NULL); ;}
     break;
 
   case 15:
-#line 68 "parser.y"
+#line 69 "parser.y"
     { (yyval.node) = createAstNode(14, NULL, (yyvsp[(1) - (1)].node), NULL); ;}
     break;
 
   case 16:
-#line 69 "parser.y"
+#line 70 "parser.y"
     { (yyval.node) = createAstNode(15, (yyvsp[(1) - (3)].node), NULL, (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 17:
-#line 70 "parser.y"
+#line 71 "parser.y"
     { (yyval.node) = createAstNode(16, (yyvsp[(1) - (3)].node), NULL, (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 18:
-#line 73 "parser.y"
+#line 74 "parser.y"
     { (yyval.node) = createAstNode(17, NULL, (yyvsp[(1) - (1)].node), NULL); ;}
     break;
 
   case 19:
-#line 74 "parser.y"
+#line 75 "parser.y"
     { (yyval.node) = createAstNode(18, (yyvsp[(1) - (3)].node), NULL, (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 20:
-#line 75 "parser.y"
+#line 76 "parser.y"
     { (yyval.node) = createAstNode(19, (yyvsp[(1) - (3)].node), NULL, (yyvsp[(3) - (3)].node)); ;}
     break;
 
   case 21:
-#line 78 "parser.y"
+#line 79 "parser.y"
     { (yyval.node) = createAstNode(20, NULL, (yyvsp[(2) - (3)].node), NULL); ;}
     break;
 
   case 22:
-#line 79 "parser.y"
+#line 80 "parser.y"
     { (yyval.node) = createIdn(21, (yyvsp[(1) - (1)].strval)); ;}
     break;
 
   case 23:
-#line 80 "parser.y"
+#line 81 "parser.y"
     { (yyval.node) = createNum(22, (yyvsp[(1) - (1)].intval)); ;}
     break;
 
   case 24:
-#line 81 "parser.y"
+#line 82 "parser.y"
     { (yyval.node) = createNum(23, (yyvsp[(1) - (1)].intval)); ;}
     break;
 
   case 25:
-#line 82 "parser.y"
+#line 83 "parser.y"
     { (yyval.node) = createNum(24, (yyvsp[(1) - (1)].intval)); ;}
     break;
 
@@ -1740,7 +1740,7 @@ yyreturn:
 }
 
 
-#line 86 "parser.y"
+#line 87 "parser.y"
 
 
 int main(int argc, const char *args[])

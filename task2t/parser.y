@@ -1,3 +1,4 @@
+/* Created by Chengwei Zhang on 5/21/20. */
 
 %{
 #include <stdio.h>
@@ -8,7 +9,7 @@
 
 void yyerror(char *s, ...);
 int yylex();
-struct ast *root;
+struct astNode *root;
 %}
 
 %debug
