@@ -68,6 +68,7 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); }
  | error '=' error      { yyerrok; }
  | IF C SP	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
  | IF C F	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | WHILE C S	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
  | WHILE C E	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
  | WHILE C DO E	{ printf("warning 'do %s' seems meaningless \n\n",yytext-1);}
  | DO	{ printf("expected WHILE before do \n");yyerror("missing WHILE");}
