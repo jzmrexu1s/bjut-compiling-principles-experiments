@@ -59,13 +59,18 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); }
  | IF error THEN SP      { yyerrok; }
  | WHILE C DO S         { $$ = createAstNode(6, $2, NULL, $4); }
  | WHILE error C DO S	{ yyerrok;}
- | WHILE C error DO S	{ yyerror("may be do");}
+ | WHILE C error DO S	{ yyerrok;printf("warning 'do %s' seems meaningless \n\n");}
  | WHILE C DO error S	{ yyerrok;}
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
  | IDN error '=' E      { yyerrok; }
  | IDN '=' error E      { yyerrok; }
  | IDN error            { yyerrok; }
  | error '=' error      { yyerrok; }
+ | IF C SP	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | IF C F	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | WHILE C E	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
+ | WHILE C DO E	{ printf("warning 'do %s' seems meaningless \n\n",yytext-1);}
+ | DO	{ printf("expected WHILE before do \n");yyerror("missing WHILE");}
  ;
 
 SP: S           { $$ = createAstNode(8, NULL, $1, NULL); }
