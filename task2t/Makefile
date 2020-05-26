@@ -1,7 +1,7 @@
 all: task2
 
 task2: parser.tab.o scanner.o
-	gcc -o $@ parser.tab.o scanner.o
+	gcc -o $@ parser.tab.o scanner.o -lm
 
 scanner.o: scanner.c parser.tab.h
 
