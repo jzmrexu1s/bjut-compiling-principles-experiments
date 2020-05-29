@@ -1,0 +1,164 @@
+case1-int10:
+input: 0
+expected output: INT10 0
+input: 1
+expected output: INT10 1
+input: 15
+expected output: INT10 15
+
+case2-int8:
+input: 00
+expected output: INT8 0
+input: 01
+expected output: INT8 1
+input: 015
+expected output: INT8 13
+
+case3-int16:
+input: 0x0
+expected output: INT16 0
+input: 0x1
+expected output: INT16 1
+input: 0x15
+expected output: INT16 21
+
+case4-opreator:
+input: +
+expect output:+ _
+input: -
+expect output:- _
+input: *
+expect output:* _
+input: /
+expect output:/ _
+input: >
+expect output:> _
+input: <
+expect output:< _
+input: =
+expect output:= _
+input: (
+expect output:( _
+input: )
+expect output:) _
+input: ;
+expect output:; _
+
+case5-keyword:
+input: if
+expect output: IF
+input: then
+expect output: THEN
+input: else
+expect output: ELSE
+input: while
+expect output: WHILE
+input: do
+expect output: DO
+
+case6-float10:
+input: 0.00
+expected output: FLOAT10 0
+input: 0.75
+expected output: FLOAT10 0.75
+input: 1.00
+expected output: FLOAT10 1
+input: 100.5
+expected output: FLOAT10 100.5
+input: 100.05
+expected output: FLOAT10 100.05
+
+case7-float8:
+input: 00.00
+expected output: FLOAT8 0.0
+input: 00.75
+expected output: FLOAT8 0.953125
+input: 01.00
+expected output: FLOAT8 1.0
+input: 0100.5
+expected output: FLOAT8 64.625
+input: 0100.05
+expected output: FLOAT8 64.78125
+
+case8-float16:
+input: 0x0.00
+expected output: FLOAT16 0.0
+input: 0x0.75
+expected output: FLOAT16 0.45703125
+input: 0x1.00
+expected output: FLOAT16 1.0
+input: 0x100.5
+expected output: FLOAT16 256.3125
+input: 0x100.05
+expected output: FLOAT16 256.01953125
+
+case9-complex:
+input: 0X0.15 + 0.15 > 0
+expected output:
+INT10		0
+IDN		X0.15
++		_
+FLOAT10		0.15
+>		_
+INT10		0
+---------------------------------------------------
+input: 0X10 + 010 = 24
+expected output:
+INT10		0
+IDN		X10
++		_
+INT8		8
+=		_
+INT10		24
+---------------------------------------------------
+input: while (a3+15)>0xa do
+expected output:
+WHILE		_
+(		_
+IDN		a3
++		_
+INT10		15
+)		_
+>		_
+INT16		10
+DO		_
+---------------------------------------------------
+input: if x2 = 07 then x2 = x2 + 0x2.34
+expected output:
+IF		_
+IDN		x2
+=		_
+INT8		7
+THEN		_
+IDN		x2
+=		_
+IDN		x2
++		_
+FLOAT16		2.203125
+---------------------------------------------------
+input: while y<z do y = x * y / z;
+expected output:
+WHILE		_
+IDN		y
+<		_
+IDN		z
+DO		_
+IDN		y
+=		_
+IDN		x
+*		_
+IDN		y
+/		_
+IDN		z
+;		_
+---------------------------------------------------
+input: c=b*c+d;
+expected output:
+IDN		c
+=		_
+IDN		b
+*		_
+IDN		c
++		_
+IDN		d
+;		_

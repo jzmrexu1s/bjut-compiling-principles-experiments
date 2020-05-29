@@ -39,8 +39,8 @@ fuhao	[+]|[-]|[*]|[/]|[>]|[<]|[=]|[(]|[)]|[;]
 
 while		{return WHILE;}
 if			{return IF;}
-then		{return ELSE;}
-else		{return WHILE;}
+then		{return THEN;}
+else		{return ELSE;}
 do			{return DO;}
 {fuhao}		{yylval=FUHAO;return yylval;}
 {idn}		{yylval=IDN;return yylval;}
