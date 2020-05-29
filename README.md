@@ -23,9 +23,10 @@ or
 Under /task2t:  
 ```shell
 make clean
-make all
-./task2  
-or:  
+make all 
 ./task2 in.txt  
 ```
 Check out.txt to obtain result after execution if an argument has been passed.
+
+### Task3
+I am working on it, please wait :)
