@@ -31,8 +31,8 @@ char* getPrintPattern(int type) {
     else if (type == 15) strcpy(s, "E -> E + T");
     else if (type == 16) strcpy(s, "E -> E - T");
     else if (type == 17) strcpy(s, "T -> F");
-    else if (type == 18) strcpy(s, "T -> * F");
-    else if (type == 19) strcpy(s, "T -> / F");
+    else if (type == 18) strcpy(s, "T -> T * F");
+    else if (type == 19) strcpy(s, "T -> T / F");
     else if (type == 20) strcpy(s, "F -> ( E )");
     else if (type == 21) strcpy(s, "F -> id     id = ");
     else if (type == 22) strcpy(s, "F -> int8     int8 = ");
