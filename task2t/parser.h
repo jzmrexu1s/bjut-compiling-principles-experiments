@@ -28,8 +28,8 @@ char* getPrintPattern(int type) {
     else if (type == 12) strcpy(s, "C' -> < E");
     else if (type == 13) strcpy(s, "C' -> = E");
     else if (type == 14) strcpy(s, "E -> T");
-    else if (type == 15) strcpy(s, "E -> + T");
-    else if (type == 16) strcpy(s, "E -> - T");
+    else if (type == 15) strcpy(s, "E -> E + T");
+    else if (type == 16) strcpy(s, "E -> E - T");
     else if (type == 17) strcpy(s, "T -> F");
     else if (type == 18) strcpy(s, "T -> * F");
     else if (type == 19) strcpy(s, "T -> / F");
