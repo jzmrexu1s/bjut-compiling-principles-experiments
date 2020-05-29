@@ -1,0 +1,80 @@
+input: a = 1;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> F
+F -> int10     int10 = 1
+
+input: abc123xyz = 0x789;
+P -> L
+L -> S;
+S -> id = E     id = abc123xyz
+E -> T
+T -> F
+F -> int16     int16 = 1929
+
+input: a = 010;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> F
+F -> int8     int8 = 8
+
+input: a = b + c;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> E + T
+E -> T
+T -> F
+F -> id     id = b
+T -> F
+F -> id     id = c
+
+input: a = b * 10;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> * F
+T -> F
+F -> id     id = b
+F -> int10     int10 = 10
+
+input: a = 0xb * b + c;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> E + T
+E -> T
+T -> * F
+T -> F
+F -> int16     int16 = 11
+F -> id     id = b
+T -> F
+F -> id     id = c
+
+input: a = 0xb * (b + c);
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> T * F
+T -> F
+F -> int16     int16 = 11
+F -> ( E )
+E -> E + T
+E -> T
+T -> F
+F -> id     id = b
+T -> F
+F -> id     id = c
+
