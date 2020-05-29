@@ -78,3 +78,152 @@ F -> id     id = b
 T -> F
 F -> id     id = c
 
+input: if a > b then a = 1;
+expected output:
+P -> L
+L -> S;
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = a
+C' -> > E
+E -> T
+T -> F
+F -> id     id = b
+S' -> S
+S -> id = E     id = a
+E -> T
+T -> F
+F -> int10     int10 = 1
+
+input: if a = 07 then b = b / c;
+expected output:
+P -> L
+L -> S;
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = a
+C' -> = E
+E -> T
+T -> F
+F -> int8     int8 = 7
+S' -> S
+S -> id = E     id = b
+E -> T
+T -> T / F
+T -> F
+F -> id     id = b
+F -> id     id = c
+
+input: if a < b then a = 0xaa else a = 0xbb;
+expected output:
+P -> L
+L -> S;
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = a
+C' -> < E
+E -> T
+T -> F
+F -> id     id = b
+S' -> S else S
+S -> id = E     id = a
+E -> T
+T -> F
+F -> int16     int16 = 170
+S -> id = E     id = a
+E -> T
+T -> F
+F -> int16     int16 = 187
+
+input: if a < b then while a < 3 do a = a + 1;
+expected output:
+P -> L
+L -> S;
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = a
+C' -> < E
+E -> T
+T -> F
+F -> id     id = b
+S' -> S
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> id     id = a
+C' -> < E
+E -> T
+T -> F
+F -> int10     int10 = 3
+S -> id = E     id = a
+E -> E + T
+E -> T
+T -> F
+F -> id     id = a
+T -> F
+F -> int10     int10 = 1
+
+P -> LP
+L -> S;
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> ( E )
+E -> E + T
+E -> T
+T -> F
+F -> id     id = a3
+T -> F
+F -> int10     int10 = 15
+C' -> > E
+E -> T
+T -> F
+F -> int16     int16 = 10
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = x2
+C' -> = E
+E -> T
+T -> F
+F -> int8     int8 = 7
+S' -> S
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> id     id = y
+C' -> < E
+E -> T
+T -> F
+F -> id     id = z
+S -> id = E     id = y
+E -> T
+T -> T / F
+T -> T * F
+T -> F
+F -> id     id = x
+F -> id     id = y
+F -> id     id = z
+P -> L
+L -> S;
+S -> id = E     id = c
+E -> E + T
+E -> T
+T -> T * F
+T -> F
+F -> id     id = b
+F -> id     id = c
+T -> F
+F -> id     id = d
