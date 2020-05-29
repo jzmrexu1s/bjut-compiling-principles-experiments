@@ -21,7 +21,7 @@ struct astNode *root;
     char *strval;
     struct astNode *node;
 }
-
+%expect 3
 %token WHILE
 %token IF
 %token THEN
@@ -81,11 +81,16 @@ SP: S           { $$ = createAstNode(8, NULL, $1, NULL); }
 
 C: E CP         { $$ = createAstNode(10, $1, NULL, $2); }
  | E error CP   { yyerrok; }
+ | error CP     { yyerrok; }
  ;
 
 CP: '>' E       { $$ = createAstNode(11, NULL, $2, NULL); }
   | '<' E       { $$ = createAstNode(12, NULL, $2, NULL); }
   | '=' E       { $$ = createAstNode(13, NULL, $2, NULL); }
+  | '>' error E { yyerrok; }
+  | '<' error E { yyerrok; }
+  | '=' error E { yyerrok; }
+  
   ;
 
 E: T            { $$ = createAstNode(14, NULL, $1, NULL); }
