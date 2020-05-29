@@ -5,7 +5,7 @@
 struct astNode {
     int pattern;
     int num;
-    char idn[5];
+    char idn[20];
     struct astNode *l;
     struct astNode *m;
     struct astNode *r;
