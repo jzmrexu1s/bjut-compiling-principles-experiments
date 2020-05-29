@@ -59,7 +59,7 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); }
  | IF error THEN SP      { yyerrok; }
  | WHILE C DO S         { $$ = createAstNode(6, $2, NULL, $4); }
  | WHILE error C DO S	{ yyerrok;}
- | WHILE C error DO S	{ yyerrok;printf("warning 'do %s' seems meaningless \n\n");}
+ | WHILE C error DO S	{ yyerrok;}
  | WHILE C DO error S	{ yyerrok;}
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
  | IDN error '=' E      { yyerrok; }
