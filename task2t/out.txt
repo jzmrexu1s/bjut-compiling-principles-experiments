@@ -1,39 +1,11 @@
 P -> LP
 L -> S;
-S -> while C do S
-C -> EC'
-E -> T
-T -> F
-F -> ( E )
-E -> + T
-E -> T
-T -> F
-F -> id : a3
-T -> F
-F -> int10 : 15
-C' -> > E
-E -> T
-T -> F
-F -> int16 : 10
-S -> if C then S'
-C -> EC'
-E -> T
-T -> F
-F -> id : x2
-C' -> = E
+S -> id = E : x2
 E -> T
 T -> F
 F -> int8 : 7
-S' -> S
-S -> while C do S
-C -> EC'
-E -> T
-T -> F
-F -> id : y
-C' -> < E
-E -> T
-T -> F
-F -> id : z
+P -> LP
+L -> S;
 S -> id = E : y
 E -> T
 T -> / F

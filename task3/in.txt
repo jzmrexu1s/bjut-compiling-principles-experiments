@@ -1,5 +1,7 @@
 x = 07;
-y = 0x19;
+y = 19;
 z = 1;
 y = x * y / z;
+if x>y then
 z = x * x + y;
+while x<y do x=x+y;

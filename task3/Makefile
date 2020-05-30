@@ -1,6 +1,6 @@
-all: task2
+all: task3
 
-task2: parser.tab.o scanner.o
+task3: parser.tab.o scanner.o
 	gcc -o $@ parser.tab.o scanner.o -lm
 
 scanner.o: scanner.c parser.tab.h
@@ -12,4 +12,4 @@ scanner.c: scanner.l
 	flex -o $@ scanner.l
 
 clean:
-	-@ rm parser.tab.c parser.tab.h scanner.c parser.output *.o task2
+	-@ rm parser.tab.c parser.tab.h scanner.c parser.output *.o task3
