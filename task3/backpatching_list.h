@@ -17,7 +17,7 @@ struct listNode* makelist(int quad){
 }
 
 struct listNode* merge(struct listNode* l1,struct listNode* l2){
-    struct listNode* l=NULL;
+    struct listNode* l=(struct listNode*)malloc(sizeof(struct listNode));
     struct listNode* now=l;
     while(l1){
         struct listNode* tmp = (struct listNode*)malloc(sizeof(struct listNode));
@@ -33,18 +33,9 @@ struct listNode* merge(struct listNode* l1,struct listNode* l2){
         now=tmp;
         l2=l2->next;
     }
-    return l;
+    return l->next;
 }
 
 
-
-void backpatch(char* str,struct listNode* p,int quad){
-    while(p){
-        char tmp[4];
-        itoa(quad,tmp,10);
-        strcat(str,tmp);
-        p=p->next;
-    }
-}
 
 

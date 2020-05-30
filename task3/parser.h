@@ -14,6 +14,7 @@ struct astNode {
 
     struct listNode *truelist;
     struct listNode *falselist;
+    struct listNode *nextlist;
 
     struct astNode *l;
     struct astNode *m;

@@ -12,11 +12,12 @@
 extern char *yytext;
 void yyerror(char *s);
 int yylex();
-
+void printGencode();
 void pplace(struct astNode *node);
 void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra);
 struct astNode* newtemp(struct astNode* node);
 struct astNode *root;
+void backpatch(struct listNode* p,int quad);
 int cnt = 0;
 int nextquad = 0;
 char *gen_str[100];
@@ -58,12 +59,12 @@ P: L            { $$ = createAstNode(1, NULL, $1, NULL); root = $$;}
  | L P          { $$ = createAstNode(2, $1, NULL, $2); root = $$;}
  ;
 
-L: S ';'        { $$ = createAstNode(3, NULL, $1, NULL); }
+L: S ';' M       { $$ = createAstNode(3, NULL, $1, NULL); backpatch($1->nextlist,$3);}
 ;
 
 S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); gen($$,'=',$3,NULL,0);}
- | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); }
- | WHILE M C DO M S         { $$ = createAstNode(6, $3, NULL, $6); }
+ | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); backpatch($2->truelist,$4); $$->nextlist=merge($2->falselist,$5->nextlist);}
+ | WHILE M C DO M S         { $$ = createAstNode(6, $3, NULL, $6); backpatch($6->nextlist,$2); backpatch($3->truelist,$5); $$->nextlist=$3->falselist; gen(NULL,'9',NULL,NULL,$2);}
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
  ;
 
@@ -117,6 +118,7 @@ int main(int argc, const char *args[])
     FILE * f;
     f = fopen("out.txt", "w+");
 	printTree(root, f);
+  printGencode();
     return 0;
 }
 
@@ -146,7 +148,10 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
 void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra){
   gen_str[nextquad]=(char *)malloc(sizeof(char)*100);
   sprintf(GEN,"%d:\t",nextquad);
-  if(extra==0){
+  if(op=='9'){
+    sprintf(GEN,"goto %d",extra);
+  }
+  else if(extra==0){
     pplace(result);
     sprintf(GEN," := ");
     if(op=='='){
@@ -163,11 +168,21 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
     sprintf(GEN," %c ",op);
     pplace(arg2);
     sprintf(GEN," goto ");
-  }else if(extra==9){
+  }
+  else if(extra==9){
     sprintf(GEN,"goto ");
   }
-  printf("%s\n",gen_str[nextquad]);
+  
   nextquad++;
+}
+
+void backpatch(struct listNode* p,int quad){
+    char tmp[4];
+    itoa(quad,tmp,10);
+    while(p){
+        strcat(gen_str[p->quad],tmp);
+        p=p->next;
+    }
 }
 
 void pplace(struct astNode *node){
@@ -181,6 +196,12 @@ void pplace(struct astNode *node){
     case 5:
       sprintf(GEN,"t%d",node->t);
       break;
+  }
+}
+
+void printGencode(){
+  for(int i=0;i<nextquad;i++){
+    printf("%s\n",gen_str[i]);
   }
 }
 
