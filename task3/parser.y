@@ -63,13 +63,13 @@ L: S ';' M       { $$ = createAstNode(3, NULL, $1, NULL); backpatch($1->nextlist
 ;
 
 S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); gen($$,'=',$3,NULL,0);}
- | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); backpatch($2->truelist,$4); $$->nextlist=merge($2->falselist,$5->nextlist);}
- | WHILE M C DO M S         { $$ = createAstNode(6, $3, NULL, $6); backpatch($6->nextlist,$2); backpatch($3->truelist,$5); $$->nextlist=$3->falselist; gen(NULL,'9',NULL,NULL,$2);}
+ | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); backpatch($2->truelist,$4); $$->nextlist=merge($2->falselist,$5->nextlist); if($5->type==6)  backpatch($2->falselist,$5->quad);}
+ | WHILE M C DO M S         { $$ = createAstNode(6, $3, NULL, $6); backpatch($6->nextlist,$2); backpatch($3->truelist,$5); $$->nextlist=merge($$->nextlist,$3->falselist); gen(NULL,'9',NULL,NULL,$2);}
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
  ;
 
-SP: S           { $$ = createAstNode(8, NULL, $1, NULL); }
-  | S ELSE M S    { $$ = createAstNode(9, $1, NULL, $4); }
+SP: S           { $$ = createAstNode(8, NULL, $1, NULL); $$->nextlist=$1->nextlist;$$->truelist=$1->truelist;$$->falselist=$1->falselist;}
+  | S M ELSE M S    { $$ = createAstNode(9, $1, NULL, $5); gen(NULL,'0',NULL,NULL,9); $$->nextlist=merge(makelist($2),$5->nextlist); $$->quad=$4; $$->type=6; }
   ;
 
 C: E CP         { $$ = createAstNode(10, $1, NULL, $2); $$ -> truelist = makelist(nextquad); $$ -> falselist = makelist(nextquad+1);
@@ -105,10 +105,14 @@ M: %empty       { $$ = nextquad; }
 int main(int argc, const char *args[])
 {
 	/* 去除注释开启debug模式 */
-    /* yydebug = 1; */
+  //   yydebug = 1; 
 
 	extern FILE *yyin;
-	if(argc > 1 && (yyin = fopen(args[1], "r")) == NULL) {
+  if(argc == 1 && (yyin = fopen("in.txt", "r")) == NULL){
+    fprintf(stderr, "can not open in.txt\n");
+		exit(1);
+  }
+	else if(argc > 1 && (yyin = fopen(args[1], "r")) == NULL) {
 		fprintf(stderr, "can not open %s\n", args[1]);
 		exit(1);
 	}
@@ -128,22 +132,6 @@ struct astNode* newtemp(struct astNode* node){
   node->type=5;
   return node;
 }
-/*
-void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra){
-  
-  strcat(gen_str[nextquad],pplace(result));
-  strcat(gen_str[nextquad]," := ");
-  //printf(" := ");
-  if(op=='='){
-    strcat(gen_str[nextquad],pplace(arg1));
-  }else{
-    strcat(gen_str[nextquad],pplace(arg1));
-    strcat(gen_str[nextquad],op);
-    //printf(" %c ",op);
-    strcat(gen_str[nextquad],pplace(arg2));
-  }
-  //printf("\n");
-}*/
 
 void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra){
   gen_str[nextquad]=(char *)malloc(sizeof(char)*100);
@@ -170,9 +158,9 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
     sprintf(GEN," goto ");
   }
   else if(extra==9){
-    sprintf(GEN,"goto ");
+    sprintf(GEN,"goto2 ");
   }
-  
+  //printf("%s\n",gen_str[nextquad]);
   nextquad++;
 }
 

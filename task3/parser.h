@@ -22,7 +22,7 @@ struct astNode {
 
     char relop;
     int type;//0:idn 1:num 5:t 6:quad 10:list
-    
+    //int iselse;
 };
 
 char* getPrintPattern(int type) {

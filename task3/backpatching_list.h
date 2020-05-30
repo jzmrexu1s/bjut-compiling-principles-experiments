@@ -3,7 +3,7 @@
 ///
 #include <string.h>
 #include <stdlib.h>
-
+#include <stdio.h>
 struct listNode {
     struct listNode *next;
     int quad;
