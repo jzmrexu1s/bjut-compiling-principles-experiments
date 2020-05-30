@@ -1,17 +1,26 @@
 //
 // Created by Chengwei Zhang on 5/21/20.
 //
-
+#include "backpatching_list.h"
 struct astNode {
     int pattern;
+
     int num;
     char idn[5];
+
+
     int t;
+    int quad;
+
+    struct listNode *truelist;
+    struct listNode *falselist;
+
     struct astNode *l;
     struct astNode *m;
     struct astNode *r;
 
-    int type;//0:idn 1:num 5:t
+    char relop;
+    int type;//0:idn 1:num 5:t 6:quad 10:list
     
 };
 

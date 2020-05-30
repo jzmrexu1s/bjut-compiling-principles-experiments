@@ -1,0 +1,6 @@
+x = 07;
+y = 19;
+z = 1;
+y = x * y / z;
+if x>y then
+z = x * x + y;
