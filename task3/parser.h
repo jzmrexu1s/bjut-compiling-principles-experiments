@@ -5,12 +5,11 @@
 struct astNode {
     int pattern;
 
-    int num;
-    char idn[5];
+    int num;//INT
+    char idn[5];//IDN
 
-
-    int t;
-    int quad;
+    int t;//temp variable
+    int quad;//not used (but i want to use it in IFTHENELSE)
 
     struct listNode *truelist;
     struct listNode *falselist;
@@ -20,9 +19,8 @@ struct astNode {
     struct astNode *m;
     struct astNode *r;
 
-    char relop;
+    char relop;//> < =
     int type;//0:idn 1:num 5:t 6:quad 10:list
-    //int iselse;
 };
 
 char* getPrintPattern(int type) {
@@ -72,12 +70,12 @@ struct astNode *createNum(int pattern, double num) {
 struct astNode *createIdn(int pattern, char *idn) {
     struct astNode *n;
     n = (struct astNode *) malloc(sizeof(struct astNode));
-    n->pattern = pattern;
+    n -> pattern = pattern;
     strcpy(n -> idn, idn);
     n -> type = 0;
-    n->l = NULL;
-    n->m = NULL;
-    n->r = NULL;
+    n -> l = NULL;
+    n -> m = NULL;
+    n -> r = NULL;
     return n;
 }
 
@@ -88,6 +86,7 @@ struct astNode *createAstNode(int pattern, struct astNode *l, struct astNode *m,
     n -> num = -1;
     memset(n -> idn, 0, sizeof(n -> idn));
     if(m!=NULL){
+        //the parent node should use children's attribute
         n -> num = m -> num;
         n -> type = m -> type;
         n -> t = m -> t;
@@ -105,7 +104,7 @@ struct astNode *createAstNodeIdn(int pattern, char *idn, struct astNode *l, stru
     n -> pattern = pattern;
     n -> num = m -> num;
     n -> type = 0;
-    n-> t = m -> t;
+    n -> t = m -> t;
     n -> l = l;
     n -> m = m;
     n -> r = r;
