@@ -7,14 +7,6 @@ E -> T
 T -> F
 F -> int10     int10 = 1
 
-input: abc123xyz = 0x789;
-P -> L
-L -> S;
-S -> id = E     id = abc123xyz
-E -> T
-T -> F
-F -> int16     int16 = 1929
-
 input: a = 010;
 expected output:
 P -> L
@@ -23,6 +15,42 @@ S -> id = E     id = a
 E -> T
 T -> F
 F -> int8     int8 = 8
+
+input: abc123xyz = 0x789;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = abc123xyz
+E -> T
+T -> F
+F -> int16     int16 = 1929
+
+input: a = 0.75;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> F
+F -> float10     float10 = 0.750000
+
+input: a = 00.75;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> F
+F -> float8     float8 = 0.953125
+
+input: a = 0x100.5;
+expected output:
+P -> L
+L -> S;
+S -> id = E     id = a
+E -> T
+T -> F
+F -> float16     float16 = 256.312500
 
 input: a = b + c;
 expected output:
