@@ -1,27 +1,55 @@
 P -> LP
 L -> S;
-S -> id = E : x2
+S -> while C do S
+C -> EC'
 E -> T
 T -> F
-F -> int8 : 7
-P -> LP
-L -> S;
-S -> id = E : y
+F -> ( E )
+E -> E + T
 E -> T
-T -> / F
-T -> * F
 T -> F
-F -> id : x
-F -> id : y
-F -> id : z
+F -> id     id = a3
+T -> F
+F -> int10     int10 = 15
+C' -> > E
+E -> T
+T -> F
+F -> int16     int16 = 10
+S -> if C then S'
+C -> EC'
+E -> T
+T -> F
+F -> id     id = x2
+C' -> = E
+E -> T
+T -> F
+F -> int8     int8 = 7
+S' -> S
+S -> while C do S
+C -> EC'
+E -> T
+T -> F
+F -> id     id = y
+C' -> < E
+E -> T
+T -> F
+F -> id     id = z
+S -> id = E     id = y
+E -> T
+T -> T / F
+T -> T * F
+T -> F
+F -> id     id = x
+F -> id     id = y
+F -> id     id = z
 P -> L
 L -> S;
-S -> id = E : c
-E -> + T
+S -> id = E     id = c
+E -> E + T
 E -> T
-T -> * F
+T -> T * F
 T -> F
-F -> id : b
-F -> id : c
+F -> id     id = b
+F -> id     id = c
 T -> F
-F -> id : d
+F -> id     id = d
