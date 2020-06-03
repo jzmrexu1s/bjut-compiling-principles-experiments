@@ -3,3 +3,9 @@
 task1/lex.yy.c
 task1/task1
 task2
+task2t/parser.output
+task2t/parser.tab.c
+task2t/parser.tab.h
+task2t/parser.tab.o
+task2t/scanner.c
+task2t/scanner.o

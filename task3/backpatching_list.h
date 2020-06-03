@@ -6,7 +6,7 @@
 #include <stdio.h>
 struct listNode {
     struct listNode *next;
-    int quad;
+    int quad;// the line number of a quad
 };
 
 struct listNode* makelist(int quad){

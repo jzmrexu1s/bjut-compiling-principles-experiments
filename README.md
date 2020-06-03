@@ -24,9 +24,17 @@ Under /task2t:
 ```shell
 make clean
 make all 
+./task2
 ./task2 in.txt  
 ```
 Check out.txt to obtain result after execution if an argument has been passed.
 
 ### Task3
-I am working on it, please wait :)
+Under /task3:
+'''
+make clean
+make all
+./task3
+./task3 in.txt
+'''
+Check out.txt to obtain result after execution if an argument has been passed.

@@ -3,6 +3,7 @@
 //gen newlabel
 //place true false next newtemp value
 %{
+//GEN means the valid postion that you can add to in the last of string
 #define GEN gen_str[nextquad]+strlen(gen_str[nextquad])
 #include <stdio.h>
 #include <string.h>
@@ -14,12 +15,25 @@ void yyerror(char *s);
 int yylex();
 void printGencode();
 void pplace(struct astNode *node);
+
+/*
+gen() is a method which can generate the 3AC code to gen_str[nextquad], then nextquad will ++.
+there are some different usage in this method and you can look for more details in the code.
+*/
 void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra);
+//create a new temporary variable for "node", and let the type to 5
 struct astNode* newtemp(struct astNode* node);
 struct astNode *root;
+
+// use "quad" backpatch all lines in "p"
 void backpatch(struct listNode* p,int quad);
-int cnt = 0;
+//the total number of temporary variable
+int cnt;
+//means the next line number of the 3AC code forever
 int nextquad = 0;
+//the starting line number
+int startquad = 100;
+//the space to save the 3AC code
 char *gen_str[100];
 %}
 
@@ -119,11 +133,11 @@ int main(int argc, const char *args[])
 	if(yyparse()) {
 		exit(-1);
 	}
-    FILE * f;
-    f = fopen("out.txt", "w+");
-	printTree(root, f);
-  printGencode();
-    return 0;
+  FILE * f;
+  f = fopen("out.txt", "w+");
+  printTree(root, f);
+  printGencode(f);
+  return 0;
 }
 
 struct astNode* newtemp(struct astNode* node){
@@ -135,9 +149,9 @@ struct astNode* newtemp(struct astNode* node){
 
 void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg2,int extra){
   gen_str[nextquad]=(char *)malloc(sizeof(char)*100);
-  sprintf(GEN,"%d:\t",nextquad);
+  sprintf(GEN,"%d:\t",nextquad+startquad);
   if(op=='9'){
-    sprintf(GEN,"goto %d",extra);
+    sprintf(GEN,"goto %d",extra+startquad);
   }
   else if(extra==0){
     pplace(result);
@@ -158,21 +172,22 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
     sprintf(GEN," goto ");
   }
   else if(extra==9){
-    sprintf(GEN,"goto2 ");
+    sprintf(GEN,"goto ");
   }
-  //printf("%s\n",gen_str[nextquad]);
   nextquad++;
 }
 
 void backpatch(struct listNode* p,int quad){
-    char tmp[4];
-    itoa(quad,tmp,10);
+    //char tmp[4];
+    //itoa(quad,tmp+startquad,10);
     while(p){
-        strcat(gen_str[p->quad],tmp);
+        sprintf(gen_str[p->quad]+strlen(gen_str[p->quad]),"%d",quad+startquad);
+        //strcat(gen_str[p->quad],tmp);
         p=p->next;
     }
 }
 
+//generate the variable name to 3AC
 void pplace(struct astNode *node){
   switch(node->type){
     case 0:
@@ -187,13 +202,12 @@ void pplace(struct astNode *node){
   }
 }
 
-void printGencode(){
+void printGencode(FILE* f){
+  fprintf(f,"\n");
   for(int i=0;i<nextquad;i++){
-    printf("%s\n",gen_str[i]);
+    fprintf(f,"%s\n",gen_str[i]);
   }
 }
-
-
 
 void yyerror(char *s)
 {
