@@ -18,6 +18,7 @@ struct astNode *root;
 
 %union {
     int intval;
+    double doubleval;
     char *strval;
     struct astNode *node;
 }
@@ -31,6 +32,9 @@ struct astNode *root;
 %token <intval> INT8
 %token <intval> INT10
 %token <intval> INT16
+%token <doubleval> FLOAT8
+%token <doubleval> FLOAT10
+%token <doubleval> FLOAT16
 
 %left '<' '>'
 %left '+' '-'
@@ -112,6 +116,9 @@ F: '(' E ')'    { $$ = createAstNode(20, NULL, $2, NULL); }
   | INT8        { $$ = createNum(22, $1); }
   | INT10       { $$ = createNum(23, $1); }
   | INT16       { $$ = createNum(24, $1); }
+  | FLOAT8      { $$ = createNum(25, $1); }
+  | FLOAT10     { $$ = createNum(26, $1); }
+  | FLOAT16     { $$ = createNum(27, $1); }
   | '('E error  { yyerrok; }
   ;
 

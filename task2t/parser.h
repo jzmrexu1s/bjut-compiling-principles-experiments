@@ -4,7 +4,7 @@
 
 struct astNode {
     int pattern;
-    int num;
+    double num;
     char idn[20];
     struct astNode *l;
     struct astNode *m;
@@ -38,6 +38,9 @@ char* getPrintPattern(int type) {
     else if (type == 22) strcpy(s, "F -> int8     int8 = ");
     else if (type == 23) strcpy(s, "F -> int10     int10 = ");
     else if (type == 24) strcpy(s, "F -> int16     int16 = ");
+    else if (type == 25) strcpy(s, "F -> float8     float8 = ");
+    else if (type == 26) strcpy(s, "F -> float10     float10 = ");
+    else if (type == 27) strcpy(s, "F -> float16     float16 = ");
     else strcpy(s, "UNDEFINED");
     return s;
 }
@@ -95,6 +98,7 @@ void printTree(struct astNode* root, FILE* f) {
     char* pattern = getPrintPattern(root -> pattern);
     fprintf(f, "%s", pattern);
     if (root -> pattern >= 22 && root -> pattern <= 24) fprintf(f, "%d", (int)root -> num);
+    if (root -> pattern >= 25 && root -> pattern <= 27) fprintf(f, "%f", root -> num);
     if (strlen(root -> idn) > 0) fprintf(f, "%s", root -> idn);
     fprintf(f, "\n");
 
