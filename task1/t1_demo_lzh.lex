@@ -62,25 +62,27 @@ char* ftoa(float num,char *str);
 char* fotoa(char *p);
 char* fhtoa(char *p);
 void myprint(int c){
+	FILE* fp=fopen("chart.txt","a");
 	switch(c){
-		case FUHAO:printf("%s\t\t_\n",yytext);break;
-		case IDN:printf("IDN\t\t%s\n",yytext);break;
-		case INT8:printf("INT8\t\t%d\n",otoi(yytext));break;
-		case INT10:printf("INT10\t\t%d\n",atoi(yytext));break;
-		case INT16:printf("INT16\t\t%d\n",htoi(yytext));break;
-		case FLOAT8:printf("FLOAT8\t\t%s\n",fotoa(yytext));break;
-		case FLOAT10:printf("FLOAT10\t\t%g\n",atof(yytext));break;
-		case FLOAT16:printf("FLOAT16\t\t%s\n",fhtoa(yytext));break;
-		case WHILE:printf("WHILE\t\t_\n");break;
-		case IF:printf("IF\t\t_\n");break;
-		case THEN:printf("THEN\t\t_\n");break;
-		case ELSE:printf("ELSE\t\t_\n");break;
-		case DO:printf("DO\t\t_\n");break;
+		case FUHAO:printf("%s\t\t_\n",yytext);fprintf(fp,"%s\t\t_\n",yytext);break;
+		case IDN:printf("IDN\t\t%s\n",yytext);fprintf(fp,"IDN\t\t%s\n",yytext);break;
+		case INT8:printf("INT8\t\t%d\n",otoi(yytext));fprintf(fp,"INT8\t\t%d\n",otoi(yytext));break;
+		case INT10:printf("INT10\t\t%d\n",atoi(yytext));fprintf(fp,"INT10\t\t%d\n",atoi(yytext));break;
+		case INT16:printf("INT16\t\t%d\n",htoi(yytext));fprintf(fp,"INT16\t\t%d\n",htoi(yytext));break;
+		case FLOAT8:printf("FLOAT8\t\t%s\n",fotoa(yytext));fprintf(fp,"FLOAT8\t\t%s\n",fotoa(yytext));break;
+		case FLOAT10:printf("FLOAT10\t\t%g\n",atof(yytext));fprintf(fp,"FLOAT10\t\t%g\n",atof(yytext));break;
+		case FLOAT16:printf("FLOAT16\t\t%s\n",fhtoa(yytext));fprintf(fp,"FLOAT16\t\t%s\n",fhtoa(yytext));break;
+		case WHILE:printf("WHILE\t\t_\n");fprintf(fp,"WHILE\t\t_\n");break;
+		case IF:printf("IF\t\t_\n");fprintf(fp,"IF\t\t_\n");break;
+		case THEN:printf("THEN\t\t_\n");fprintf(fp,"THEN\t\t_\n");break;
+		case ELSE:printf("ELSE\t\t_\n");fprintf(fp,"ELSE\t\t_\n");break;
+		case DO:printf("DO\t\t_\n");fprintf(fp,"DO\t\t_\n");break;
 	}
+    fclose(fp);
 }
 
 int main(void){
-	yyin=stdin;
+	yyin=fopen("in.txt","r");
 	int c;
 	while (c = yylex()){
 		myprint(c);
