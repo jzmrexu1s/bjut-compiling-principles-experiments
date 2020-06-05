@@ -6,12 +6,17 @@
 #include <string.h>
 #include "parser.tab.h"
 void yyerror(char *s, ...);
+int yycolumn = 1;
 int htoi(char s[]);
 int otoi(char *p);
 char* itoa(int num,char *str);
 char* ftoa(float num,char *str);
 char* fotoa(char *p);
 char* fhtoa(char *p);
+#define YY_USER_ACTION \
+        yylloc.first_line = yylloc.last_line = yylineno;            \
+        yylloc.first_column = yycolumn; yylloc.last_column = yycolumn+yyleng-1; \
+        yycolumn += yyleng;
 #define FUHAO 1
 %}
 
@@ -41,7 +46,7 @@ do			{return DO;}
 {int16}		{yylval.intval = htoi(yytext); return INT16;}
 
 .			{;}
-
+\n          {}
 
 %%
 

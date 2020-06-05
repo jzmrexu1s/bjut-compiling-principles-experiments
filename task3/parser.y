@@ -77,9 +77,25 @@ L: S ';' M       { $$ = createAstNode(3, NULL, $1, NULL); backpatch($1->nextlist
 ;
 
 S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); gen($$,'=',$3,NULL,0);}
+ | IDN error '=' E      { yyerrok; }
+ | IDN '=' error E      { yyerrok; }
+ | IDN error            { yyerrok; }
+ | error '=' error      { yyerrok; }
  | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); backpatch($2->truelist,$4); $$->nextlist=merge($2->falselist,$5->nextlist); if($5->type==6)  backpatch($2->falselist,$5->quad);}
+ | IF error C THEN SP    { yyerrok; }
+ | IF C error THEN SP    { yyerrok; }
+ | IF C THEN error SP    { yyerrok; }
+ | IF error THEN SP      { yyerrok; }
  | WHILE M C DO M S         { $$ = createAstNode(6, $3, NULL, $6); backpatch($6->nextlist,$2); backpatch($3->truelist,$5); $$->nextlist=merge($$->nextlist,$3->falselist); gen(NULL,'9',NULL,NULL,$2);}
+ | WHILE error M C DO M S       { yyerrok; }
+ | WHILE M C error DO M S       { yyerrok; }
+ | WHILE M C error DO error M S     { yyerrok; }
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
+ | IF C M SP	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | IF C F	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | WHILE M C M S	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
+ | WHILE M C E	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
+ | DO	{ printf("expected WHILE before do \n");yyerror("missing WHILE");}
  ;
 
 SP: S           { $$ = createAstNode(8, NULL, $1, NULL); $$->nextlist=$1->nextlist;$$->truelist=$1->truelist;$$->falselist=$1->falselist;}
@@ -88,21 +104,31 @@ SP: S           { $$ = createAstNode(8, NULL, $1, NULL); $$->nextlist=$1->nextli
 
 C: E CP         { $$ = createAstNode(10, $1, NULL, $2); $$ -> truelist = makelist(nextquad); $$ -> falselist = makelist(nextquad+1);
                   gen(NULL,$2->relop,$1,$2,1); gen(NULL,'0',NULL,NULL,9); }
+ | E error CP   { yyerrok; }
+ | error CP     { yyerrok; }
+  
  ;
 
 CP: '>' E       { $$ = createAstNode(11, NULL, $2, NULL); $$ -> relop = '>';}
   | '<' E       { $$ = createAstNode(12, NULL, $2, NULL); $$ -> relop = '<';}
   | '=' E       { $$ = createAstNode(13, NULL, $2, NULL); $$ -> relop = '=';}
+  | '>' error E { yyerrok; }
+  | '<' error E { yyerrok; }
+  | '=' error E { yyerrok; }
   ;
 
 E: T            { $$ = createAstNode(14, NULL, $1, NULL); $$ -> type = $1 ->type;}
   | E '+' T     { $$ = createAstNode(15, $1, NULL, $3);  $$ = newtemp($$); gen($$,'+',$1,$3,0);}
   | E '-' T     { $$ = createAstNode(16, $1, NULL, $3);  $$ = newtemp($$); gen($$,'-',$1,$3,0);}
+  | E '+' error T { yyerrok; }
+  | E '-' error T { yyerrok; }
   ;
 
 T: F            { $$ = createAstNode(17, NULL, $1, NULL); $$ -> type = $1 ->type;}
   | T '*' F     { $$ = createAstNode(18, $1, NULL, $3);  $$ = newtemp($$); gen($$,'*',$1,$3,0);}
   | T '/' F     { $$ = createAstNode(19, $1, NULL, $3);  $$ = newtemp($$); gen($$,'/',$1,$3,0);}
+  | T '*' error F { yyerrok; }
+  | T '/' error F { yyerrok; }
   ;
 
 F: '(' E ')'    { $$ = createAstNode(20, NULL, $2, NULL); }
@@ -110,6 +136,7 @@ F: '(' E ')'    { $$ = createAstNode(20, NULL, $2, NULL); }
   | INT8        { $$ = createNum(22, $1); }
   | INT10       { $$ = createNum(23, $1); }
   | INT16       { $$ = createNum(24, $1); }
+  | '('E error  { yyerrok; }
   ;
 
 M: %empty       { $$ = nextquad; }
