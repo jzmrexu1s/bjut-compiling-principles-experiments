@@ -1,0 +1,11 @@
+IF		_
+IDN		a
+<		_
+INT10		b
+THEN		_
+IDN		c
+=		_
+IDN		d
++		_
+INT10		65
+;		_

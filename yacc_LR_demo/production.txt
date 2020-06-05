@@ -1,0 +1,22 @@
+P-> L
+P-> L P
+L-> S ;
+S-> IDN = E
+S-> IF C THEN S
+S-> IF C THEN S ELSE S
+S-> WHILE C DO S
+S-> { P } 
+C-> E > E
+C-> E < E
+C-> E = E
+E-> E + T 
+E-> E - T 
+E-> T 
+T-> F
+T-> T * F
+T-> T / F
+F-> ( E )
+F-> IDN
+F-> INT8
+F-> INT10
+F-> INT16
