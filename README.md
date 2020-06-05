@@ -2,6 +2,8 @@
 Coursework of compiling principles in BJUT. 
 ## Environment
 Tested on Ubuntu 18.04.4 and macOS 10.15.4 with gcc (or clang), flex and bison installed. 
+
+Yacc_LR_demo is only avilible on Windows now.
 ## Usage
 ### Task1
 Under /task1:  
@@ -38,3 +40,11 @@ make all
 ./task3 in.txt
 '''
 Check out.txt to obtain result after execution if an argument has been passed.
+
+### yacc_LR_demo
+Under /yacc_LR_demo:
+```shell
+Only avilible on Windows:
+Click "yacc_LR_demo.exe",then you can get everything you want.
+If you want to use this yacc_demo to analyze another sentence, please check "User_Guide.txt".
+```
