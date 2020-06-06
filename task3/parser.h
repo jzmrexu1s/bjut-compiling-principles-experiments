@@ -5,8 +5,8 @@
 struct astNode {
     int pattern;
 
-    int num;//INT
-    char idn[5];//IDN
+    double num;//INT
+    char idn[20];//IDN
 
     int t;//temp variable
     int quad;//not used (but i want to use it in IFTHENELSE)
@@ -29,7 +29,7 @@ char* getPrintPattern(int type) {
     if (type == 1) strcpy(s, "P -> L");
     else if (type == 2) strcpy(s, "P -> LP");
     else if (type == 3) strcpy(s, "L -> S;");
-    else if (type == 4) strcpy(s, "S -> id = E");
+    else if (type == 4) strcpy(s, "S -> id = E     id = ");
     else if (type == 5) strcpy(s, "S -> if C then S'");
     else if (type == 6) strcpy(s, "S -> while C do S");
     else if (type == 7) strcpy(s, "S -> {P}");
@@ -40,16 +40,19 @@ char* getPrintPattern(int type) {
     else if (type == 12) strcpy(s, "C' -> < E");
     else if (type == 13) strcpy(s, "C' -> = E");
     else if (type == 14) strcpy(s, "E -> T");
-    else if (type == 15) strcpy(s, "E -> + T");
-    else if (type == 16) strcpy(s, "E -> - T");
+    else if (type == 15) strcpy(s, "E -> E + T");
+    else if (type == 16) strcpy(s, "E -> E - T");
     else if (type == 17) strcpy(s, "T -> F");
-    else if (type == 18) strcpy(s, "T -> * F");
-    else if (type == 19) strcpy(s, "T -> / F");
+    else if (type == 18) strcpy(s, "T -> T * F");
+    else if (type == 19) strcpy(s, "T -> T / F");
     else if (type == 20) strcpy(s, "F -> ( E )");
-    else if (type == 21) strcpy(s, "F -> id");
-    else if (type == 22) strcpy(s, "F -> int8");
-    else if (type == 23) strcpy(s, "F -> int10");
-    else if (type == 24) strcpy(s, "F -> int16");
+    else if (type == 21) strcpy(s, "F -> id     id = ");
+    else if (type == 22) strcpy(s, "F -> int8     int8 = ");
+    else if (type == 23) strcpy(s, "F -> int10     int10 = ");
+    else if (type == 24) strcpy(s, "F -> int16     int16 = ");
+    else if (type == 25) strcpy(s, "F -> float8     float8 = ");
+    else if (type == 26) strcpy(s, "F -> float10     float10 = ");
+    else if (type == 27) strcpy(s, "F -> float16     float16 = ");
     else strcpy(s, "UNDEFINED");
     return s;
 }
@@ -117,8 +120,9 @@ void printTree(struct astNode* root, FILE* f) {
     if (root == NULL) return;
     char* pattern = getPrintPattern(root -> pattern);
     fprintf(f, "%s", pattern);
-    if (root -> pattern >= 22 && root -> pattern <= 24) fprintf(f, " : %d", (int)root -> num);
-    if (strlen(root -> idn) > 0) fprintf(f, " : %s", root -> idn);
+    if (root -> pattern >= 22 && root -> pattern <= 24) fprintf(f, "%d", (int)root -> num);
+    if (root -> pattern >= 25 && root -> pattern <= 27) fprintf(f, "%f", root -> num);
+    if ((root -> pattern == 4 || root -> pattern == 21) && strlen(root -> idn) > 0) fprintf(f, "%s", root -> idn);
     fprintf(f, "\n");
 
     if (root -> l != NULL)

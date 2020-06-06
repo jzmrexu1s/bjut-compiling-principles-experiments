@@ -11,8 +11,8 @@ int htoi(char s[]);
 int otoi(char *p);
 char* itoa(int num,char *str);
 char* ftoa(float num,char *str);
-char* fotoa(char *p);
-char* fhtoa(char *p);
+double aotof(char *p);
+double ahtof(char *p);
 #define YY_USER_ACTION \
         yylloc.first_line = yylloc.last_line = yylineno;            \
         yylloc.first_column = yycolumn; yylloc.last_column = yycolumn+yyleng-1; \
@@ -44,9 +44,13 @@ do			{return DO;}
 {int10}		{yylval.intval = atoi(yytext); return INT10;}
 {int8}		{yylval.intval = otoi(yytext); return INT8;}
 {int16}		{yylval.intval = htoi(yytext); return INT16;}
+{float10}	{yylval.doubleval = atof(yytext); return FLOAT10;}
+{float8}	{yylval.doubleval = aotof(yytext); return FLOAT8;}
+{float16}	{yylval.doubleval = ahtof(yytext); return FLOAT16;}
 
 .			{;}
 \n          {}
+
 
 %%
 
@@ -103,7 +107,7 @@ char* ftoa(float num,char *str)
 }
 
 
-char* fotoa(char *p) {
+double aotof(char *p) {
     int fcount = 0;
     int i = 0;
     int f = 0;
@@ -122,11 +126,10 @@ char* fotoa(char *p) {
     }
     char s[100];
     sprintf(s, "%d.%0*d", i, fcount*3, f);
-    char* ps = s;
-    return ps;
+    return atof(s);
 }
 
-char* fhtoa(char *p){
+double ahtof(char *p){
     int fcount = 0;
     int i = 0;
     float f = 0;
@@ -159,11 +162,11 @@ char* fhtoa(char *p){
     strcat(si, ".");
     strcpy(s, si);
     strcat(s, sf);
-    char* ps = s;
-    return ps;
+    return atof(s);
 }
 
-int otoi(char *p){   
+int otoi(char *p)
+{   
 	int n;
     n= *p-'0';
     p++;
@@ -174,7 +177,8 @@ int otoi(char *p){
     return n;
 }
 
-int htoi(char s[]){
+int htoi(char s[])
+{
     int i=2;
     int n=0;
     for(;s[i]!='\0';++i)
