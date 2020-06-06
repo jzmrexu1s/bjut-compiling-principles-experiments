@@ -33,12 +33,12 @@ Check out.txt to obtain result after execution if an argument has been passed.
 
 ### Task3
 Under /task3:
-'''
+```
 make clean
 make all
 ./task3
 ./task3 in.txt
-'''
+```
 Check out.txt to obtain result after execution if an argument has been passed.
 
 ### yacc_LR_demo
