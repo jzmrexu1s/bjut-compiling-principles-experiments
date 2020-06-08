@@ -70,12 +70,12 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); }
  | IDN '=' error E      { yyerrok; }
  | IDN error            { yyerrok; }
  | error '=' error      { yyerrok; }
- | IF C SP	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
- | IF C F	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | IF C SP	{ printf("expected 'then' before '%s' \n",yytext); yyerror("missing THEN"); }
+ | IF C F	{ printf("expected 'then' before '%s' \n",yytext);  yyerror("missing THEN"); }
  | WHILE C S	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
  | WHILE C E	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
- | WHILE C DO E	{ printf("warning 'do %s' seems meaningless \n\n",yytext-1);}
- | DO	{ printf("expected WHILE before do \n");yyerror("missing WHILE");}
+ | WHILE C DO E	{ printf("Warning: 'do %s' seems meaningless \n\n",yytext-1);}
+ | DO	{ printf("WHILE statement not detected before 'do' \n");yyerror("missing WHILE");}
  ;
 
 SP: S           { $$ = createAstNode(8, NULL, $1, NULL); }
@@ -91,10 +91,9 @@ C: E CP         { $$ = createAstNode(10, $1, NULL, $2); }
 CP: '>' E       { $$ = createAstNode(11, NULL, $2, NULL); }
   | '<' E       { $$ = createAstNode(12, NULL, $2, NULL); }
   | '=' E       { $$ = createAstNode(13, NULL, $2, NULL); }
-  | '>' error E { yyerrok; }
-  | '<' error E { yyerrok; }
-  | '=' error E { yyerrok; }
-  
+  | '>' error E { yyerrok;}
+  | '<' error E { yyerrok;}
+  | '=' error E { yyerrok;}
   ;
 
 E: T            { $$ = createAstNode(14, NULL, $1, NULL); }
@@ -119,7 +118,7 @@ F: '(' E ')'    { $$ = createAstNode(20, NULL, $2, NULL); }
   | FLOAT8      { $$ = createNum(25, $1); }
   | FLOAT10     { $$ = createNum(26, $1); }
   | FLOAT16     { $$ = createNum(27, $1); }
-  | '('E error  { yyerrok; }
+  | '('E error  { yyerrok;yyerror("Missing ')'") ;}
   ;
 
 
@@ -158,5 +157,6 @@ void yyerror(char *s)
     int i;
     printf("Unexpected '%s' \n",yytext);
     fprintf(stderr, "Error: %s on Line: %d:c%d to %d:c%d\n\n", s, yylineno, start, yylineno, end);
+
 
 }
