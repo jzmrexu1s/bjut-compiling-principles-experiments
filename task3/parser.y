@@ -94,11 +94,12 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); gen($$,'
  | WHILE M C error DO M S       { yyerrok; }
  | WHILE M C error DO error M S     { yyerrok; }
  | '{' P '}'            { $$ = createAstNode(7, NULL, $2, NULL); }
- | IF C M SP	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
- | IF C F	{ printf("expected 'then' before '%s' ",yytext); yyerrok; }
+ | IF C M SP	{ printf("expected 'then' before '%s' ",yytext); yyerror("missing THEN"); }
+ | IF C F	{ printf("expected 'then' before '%s' ",yytext);yyerror("missing THEN"); }
  | WHILE M C M S	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
  | WHILE M C E	{ printf("expected 'do' before '%s' \n",yytext); yyerror("missing DO");}
- | DO	{ printf("expected WHILE before do \n");yyerror("missing WHILE");}
+ | DO	{ printf("WHILE statement not detected before 'do' \n");yyerror("missing WHILE");}
+ 
  ;
 
 SP: S           { $$ = createAstNode(8, NULL, $1, NULL); $$->nextlist=$1->nextlist;$$->truelist=$1->truelist;$$->falselist=$1->falselist;}
