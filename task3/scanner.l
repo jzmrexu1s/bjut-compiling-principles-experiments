@@ -49,7 +49,7 @@ do			{return DO;}
 {float16}	{yylval.doubleval = ahtof(yytext); return FLOAT16;}
 
 .			{;}
-\n          {}
+\n          {yycolumn = 1;}
 
 
 %%
