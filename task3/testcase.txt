@@ -63,3 +63,70 @@ expected output:
 111:	t2 := a+1
 112:	a := t2
 113:	goto 109
+
+input:
+a=b=c;
+expected output:
+Unexpected '='
+Error: syntax error on Line: 1:c4 to 1:c4
+
+input:
+while a=b c=d;
+expected output:
+expected 'do' before ';'
+Unexpected ';'
+Error: missing DO on Line: 1:c14 to 1:c14
+
+input:
+if a=b c=d;
+expected output:
+expected 'then' before ';'
+Unexpected ';'
+Error: missing THEN on Line : 1:c11 to 1:c11
+
+input:
+while a=b do c=(11+d ;
+expected output:
+Unexpected ';'
+Error: Missing ')' on Line: 1:c22 to 1:c22
+
+input:
+while a=b do 1;
+expected output:
+Warning: 'do 1;' seems meaningless
+
+input:
+a=10; do b=a;
+expected output:
+WHILE statement not detected before 'do'
+Unexpected 'do'
+Error: missing WHILE on Line: 1:c7 to 1:c8
+
+Unexpected 'b'
+Error: syntax error on Line: 1:c10 to 1:c10
+
+input:
+while a=b c=d; e=f=g;
+enpected output:
+expected 'do' before ';'
+Unexpected ';'
+Error: missing DO on Line: 1:c14 to 1:c14
+
+Unexpected '='
+Error: syntax error on Line: 1:c19 to 1:c19
+
+input:(多处错误测试）
+while a=b c=d;
+if a=1 b=2;
+e=f=g;
+expected ouout：
+expected 'do' before ';'
+Unexpected ';'
+Error: missing DO on Line: 1:c14 to 1:c14
+
+expected 'then' before ';'
+Unexpected ';'
+Error: missing THEN on Line: 2:c27 to 2:c27
+
+Unexpected '='
+Error: syntax error on Line: 3:c33 to 3:c33

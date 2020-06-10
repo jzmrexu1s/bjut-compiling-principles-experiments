@@ -11,41 +11,41 @@
 #include "pre.h"
 #define acc 999 
 using namespace std;
-state G;													//ÍØ¹ãÎÄ·¨ 
-vector<state> C;											//ÏîÄ¿¼¯¹æ·¶×å 
-vector<int> target;											//´ı·ÖÎöÓï¾äµÄ×é³É²¿·Ö intĞÍ 
-vector<string> target_component;							//´ı·ÖÎöÓï¾äµÄ×é³É²¿·Ö stringĞÍ 
+state G;													//æ‹“å¹¿æ–‡æ³• 
+vector<state> C;											//é¡¹ç›®é›†è§„èŒƒæ— 
+vector<int> target;											//å¾…åˆ†æè¯­å¥çš„ç»„æˆéƒ¨åˆ† intå‹ 
+vector<string> target_component;							//å¾…åˆ†æè¯­å¥çš„ç»„æˆéƒ¨åˆ† stringå‹ 
 
-map<string,int> token;										//¸ù¾İtokenÖ±½Ó²éÕÒËüµÄÏÂ±ê 
-map<int,string> itoken;										//¸ù¾İtokenµÄÏÂ±êÖØĞÂÓ³Éä»Ø×Ö·û´®ĞÎÊ½ 
+map<string,int> token;										//æ ¹æ®tokenç›´æ¥æŸ¥æ‰¾å®ƒçš„ä¸‹æ ‡ 
+map<int,string> itoken;										//æ ¹æ®tokençš„ä¸‹æ ‡é‡æ–°æ˜ å°„å›å­—ç¬¦ä¸²å½¢å¼ 
 
-stack<int> ssta;											//×´Ì¬Õ» 
-stack<int> xsta;											//·ûºÅÕ»£¬ÓÃÓÚ´æ·Å»îÇ°×º 
-stack<string> strsta;										//ÓÃÓÚ´æ·ÅĞèÒªÊä³öµÄÖÕ½á·û 
+stack<int> ssta;											//çŠ¶æ€æ ˆ 
+stack<int> xsta;											//ç¬¦å·æ ˆï¼Œç”¨äºå­˜æ”¾æ´»å‰ç¼€ 
+stack<string> strsta;										//ç”¨äºå­˜æ”¾éœ€è¦è¾“å‡ºçš„ç»ˆç»“ç¬¦ 
 
-int action[100][100],go_to[100][100];						//actionºÍgo_to±í 
-int ip;														//Ö¸ÏòÏÂÒ»¸ö´ı·ÖÎö·ûºÅ 
+int action[100][100],go_to[100][100];						//actionå’Œgo_toè¡¨ 
+int ip;														//æŒ‡å‘ä¸‹ä¸€ä¸ªå¾…åˆ†æç¬¦å· 
 
-void printstate(state res);									//´òÓ¡Ò»¸östateµÄÄÚÈİ 
-void print_ans_table();										//´òÓ¡·ÖÎö±í 
-bool judge(vector<int> &j_str, state j_state);				//ÅĞ¶Ï²úÉúÊ½ÊÇ·ñÒÑ¾­ÔÚstateÖĞ£¨½öÕë¶ÔÎ»ÖÃÎª-1£© 
-bool judge_equal(vector<int> &vec1,vector<int> &vec2);		//ÅĞ¶ÏÁ½¸övectorÊÇ·ñÏàµÈ£¬ÓÃÓÚÅĞ¶Ï²úÉúÊ½ÓÒ²¿ÊÇ·ñÏàµÈ 
-bool judge_in(state j_state);								//ÅĞ¶ÏĞÂµÄstateÊÇ·ñÒÑ¾­ÔÚµ±Ç°ÏîÄ¿¼¯¹æ·¶×åCÖĞ 
-int judge_type(int j_lstr,vector<int> &j_rstr,int j_idx);	//ÅĞ¶Ï²úÉúÊ½µÄÀàĞÍ£¬×¨ÓÃÓÚ·ÖÎö±í¹¹Ôì 
-int find_ans_idx(int f_lstr,vector<int> &f_rstr,int f_idx);	//ÔÚÍØ¹ãÎÄ·¨GÖĞ»ñÈ¡²úÉúÊ½ÏÂ±ê 
-int find_state_idx(state f_state);							//»ñÈ¡×´Ì¬µÄÏÂ±ê 
-bool need_output(string tt);								//ÊÇ·ñÊÇĞèÒªÊä³öµÄÖÕ½á·û£¨Ä¿Ç°½ö¶ÔÓÚÊµÑé¶şµÄ±ê×¼ÎÄ·¨ÓĞĞ§£© 
-vector<int> fc(state f_state);								//ÅĞ¶ÏÒ»¸ö×´Ì¬¿ÉÒÔÓĞ¶àÉÙ¸öÒÆ½øÑ¡Ïî£¬²¢ÒÔvectorĞÎÊ½·µ»Ø 
-state closure(state I);										//ÇóÒ»¸ö×´Ì¬µÄ±Õ°ü 
-state transfer_function(state I,int next_token);			//Çó×ªÒÆº¯Êı 
-void proC();												//ÇóÏîÄ¿¼¯¹æ·¶×åC 
-void ans_table_create(); 									//Éú³É·ÖÎö±í 
-void compile_vision();										//ÓÃÓÚÊ¶±ğ´ı·ÖÎöÓï¾ä 
-void LR();													//Óï·¨·ÖÎö³ÌĞò 
+void printstate(state res);									//æ‰“å°ä¸€ä¸ªstateçš„å†…å®¹ 
+void print_ans_table();										//æ‰“å°åˆ†æè¡¨ 
+bool judge(vector<int> &j_str, state j_state);				//åˆ¤æ–­äº§ç”Ÿå¼æ˜¯å¦å·²ç»åœ¨stateä¸­ï¼ˆä»…é’ˆå¯¹ä½ç½®ä¸º-1ï¼‰ 
+bool judge_equal(vector<int> &vec1,vector<int> &vec2);		//åˆ¤æ–­ä¸¤ä¸ªvectoræ˜¯å¦ç›¸ç­‰ï¼Œç”¨äºåˆ¤æ–­äº§ç”Ÿå¼å³éƒ¨æ˜¯å¦ç›¸ç­‰ 
+bool judge_in(state j_state);								//åˆ¤æ–­æ–°çš„stateæ˜¯å¦å·²ç»åœ¨å½“å‰é¡¹ç›®é›†è§„èŒƒæ—Cä¸­ 
+int judge_type(int j_lstr,vector<int> &j_rstr,int j_idx);	//åˆ¤æ–­äº§ç”Ÿå¼çš„ç±»å‹ï¼Œä¸“ç”¨äºåˆ†æè¡¨æ„é€  
+int find_ans_idx(int f_lstr,vector<int> &f_rstr,int f_idx);	//åœ¨æ‹“å¹¿æ–‡æ³•Gä¸­è·å–äº§ç”Ÿå¼ä¸‹æ ‡ 
+int find_state_idx(state f_state);							//è·å–çŠ¶æ€çš„ä¸‹æ ‡ 
+bool need_output(string tt);								//æ˜¯å¦æ˜¯éœ€è¦è¾“å‡ºçš„ç»ˆç»“ç¬¦ï¼ˆç›®å‰ä»…å¯¹äºå®éªŒäºŒçš„æ ‡å‡†æ–‡æ³•æœ‰æ•ˆï¼‰ 
+vector<int> fc(state f_state);								//åˆ¤æ–­ä¸€ä¸ªçŠ¶æ€å¯ä»¥æœ‰å¤šå°‘ä¸ªç§»è¿›é€‰é¡¹ï¼Œå¹¶ä»¥vectorå½¢å¼è¿”å› 
+state closure(state I);										//æ±‚ä¸€ä¸ªçŠ¶æ€çš„é—­åŒ… 
+state transfer_function(state I,int next_token);			//æ±‚è½¬ç§»å‡½æ•° 
+void proC();												//æ±‚é¡¹ç›®é›†è§„èŒƒæ—C 
+void ans_table_create(); 									//ç”Ÿæˆåˆ†æè¡¨ 
+void compile_vision();										//ç”¨äºè¯†åˆ«å¾…åˆ†æè¯­å¥ 
+void LR();													//è¯­æ³•åˆ†æç¨‹åº 
 
 
 void printstate(state res){
-	//ÒÀ´Î´òÓ¡×´Ì¬ÖĞµÄÄÚÈİ 
+	//ä¾æ¬¡æ‰“å°çŠ¶æ€ä¸­çš„å†…å®¹ 
 	for(int i=0;i<res.idx.size();i++){
 		cout<<itoken[res.lstr[i]]<<"   ";
 		if(res.idx[i]==-1) cout<<".";
@@ -70,7 +70,7 @@ void print_ans_table(){
 	for(int i=0;i<C.size();i++){
 		for(int j=V.size();j<=token.size();j++){
 			cout.width(wid);
-			//999ÌØÖ¸·ÖÎö½áÊø 
+			//999ç‰¹æŒ‡åˆ†æç»“æŸ 
 			if(action[i][j]==999) cout<<"end";
 			else cout<<action[i][j];
 		} cout<<"|";
@@ -80,17 +80,17 @@ void print_ans_table(){
 }
 
 bool judge(vector<int> &j_str, state j_state){
-	//±éÀúJµÄÃ¿Ò»¸ö²úÉúÊ½Óë´ı¼ÓÈëµÄ²úÉúÊ½±È¶Ô 
+	//éå†Jçš„æ¯ä¸€ä¸ªäº§ç”Ÿå¼ä¸å¾…åŠ å…¥çš„äº§ç”Ÿå¼æ¯”å¯¹ 
 	for(int i=0;i<j_state.rstr.size();i++){
-		int flag=0;		//ÓÃÓÚ±ê¼ÇÊÇ·ñÏàÍ¬0ÏàÍ¬£¬1²»Í¬ 
-		if(j_state.idx[i]!=-1) continue;	//Èç¹ûµ±Ç°²úÉúÊ½µÄÎ»ÖÃ²»ÊÇ-1£¬¾ÍÖ±½ÓÌø¹ı 
-		for(int j=0;j<j_str.size();j++){	//ÖğÒ»±È¶Ô 
+		int flag=0;		//ç”¨äºæ ‡è®°æ˜¯å¦ç›¸åŒ0ç›¸åŒï¼Œ1ä¸åŒ 
+		if(j_state.idx[i]!=-1) continue;	//å¦‚æœå½“å‰äº§ç”Ÿå¼çš„ä½ç½®ä¸æ˜¯-1ï¼Œå°±ç›´æ¥è·³è¿‡ 
+		for(int j=0;j<j_str.size();j++){	//é€ä¸€æ¯”å¯¹ 
 			if((j_str[j]!=j_state.rstr[i][j])||(j==j_state.rstr[i].size())){
 				flag=1;break;
 			}
 		}
-		//È«²¿ÏàÍ¬ÇÒ³¤¶ÈÒ²ÏàÍ¬ 
-		if(flag==0&&j_str.size()==j_state.rstr[i].size()) return true;	//³öÏÖ¹ı 
+		//å…¨éƒ¨ç›¸åŒä¸”é•¿åº¦ä¹Ÿç›¸åŒ 
+		if(flag==0&&j_str.size()==j_state.rstr[i].size()) return true;	//å‡ºç°è¿‡ 
 	}
 	return false;
 }
@@ -108,7 +108,7 @@ bool judge_equal(vector<int> &vec1,vector<int> &vec2){
 bool judge_in(state j_state){
 	for(int i=0;i<C.size();i++){
 		if(j_state.idx.size()!=C[i].idx.size()) continue;
-		//¶ÔÓÚĞÂ×´Ì¬ÖĞµÄÃ¿Ò»Ïî 
+		//å¯¹äºæ–°çŠ¶æ€ä¸­çš„æ¯ä¸€é¡¹ 
 		int flag=0;
 		for(int j=0;j<j_state.idx.size();j++){
 			for(int k=0;k<C[i].idx.size();k++){
@@ -124,18 +124,18 @@ bool judge_in(state j_state){
 }
 
 int judge_type(int j_lstr,vector<int> &j_rstr,int j_idx){
-	//Èç¹û²úÉúÊ½ÊÇStart->S. 
+	//å¦‚æœäº§ç”Ÿå¼æ˜¯Start->S. 
 	if(j_lstr==0&&j_rstr[0]==1&&j_idx==0) return -2;
-	//Èç¹û²úÉúÊ½ÊÇA->alpha. 
+	//å¦‚æœäº§ç”Ÿå¼æ˜¯A->alpha. 
 	if(j_idx==j_rstr.size()-1) return -1;
 	else{
-		//·µ»ØÏÂÒ»¸ötokenµÄ±àºÅ 
+		//è¿”å›ä¸‹ä¸€ä¸ªtokençš„ç¼–å· 
 		return j_rstr[j_idx+1];
 	}
 }
 
 int find_ans_idx(int f_lstr,vector<int> &f_rstr,int f_idx){
-	//±éÀúGÖĞËùÓĞµÄ²úÉúÊ½ 
+	//éå†Gä¸­æ‰€æœ‰çš„äº§ç”Ÿå¼ 
 	for(int i=0;i<G.idx.size();i++){
 		if(G.lstr[i]!=f_lstr) continue;
 		if(!judge_equal(G.rstr[i],f_rstr)) continue;
@@ -148,7 +148,7 @@ int find_ans_idx(int f_lstr,vector<int> &f_rstr,int f_idx){
 int find_state_idx(state j_state){
 	for(int i=0;i<C.size();i++){
 		if(j_state.idx.size()!=C[i].idx.size()) continue;
-		//¶ÔÓÚĞÂ×´Ì¬ÖĞµÄÃ¿Ò»Ïî 
+		//å¯¹äºæ–°çŠ¶æ€ä¸­çš„æ¯ä¸€é¡¹ 
 		int flag=0;
 		for(int j=0;j<j_state.idx.size();j++){
 			for(int k=0;k<C[i].idx.size();k++){
@@ -176,13 +176,13 @@ vector<int> fc(state f_state){
 	vector<int> fcres;
 	int invec[100];
 	memset(invec,0,sizeof(invec));
-	//¶ÔÓÚÃ¿¸ö²úÉúÊ½ 
+	//å¯¹äºæ¯ä¸ªäº§ç”Ÿå¼ 
 	for(int i=0;i<f_state.idx.size();i++){
-		//Èç¹û³¤¶ÈÓĞĞ§ 
+		//å¦‚æœé•¿åº¦æœ‰æ•ˆ 
 		int ta=f_state.idx[i],tb=f_state.rstr[i].size()-1;
 		if(ta<tb){
 			int tmptoken=f_state.rstr[i][f_state.idx[i]+1];//cout<<invec[tmptoken]<<" ";
-			//ÇÒµ±Ç°tokenÃ»ÓĞ¼ÓÈë 
+			//ä¸”å½“å‰tokenæ²¡æœ‰åŠ å…¥ 
 			if(!invec[tmptoken]) fcres.push_back(tmptoken),invec[tmptoken]=1;
 		}
 	}
@@ -191,21 +191,21 @@ vector<int> fc(state f_state){
 
 state closure(state I){
 	state J=I;
-	int flag=1;		//ÓÃÓÚÅĞ¶ÏÊÇ·ñÓĞĞÂµÄ²úÉúÊ½¼ÓÈë 
+	int flag=1;		//ç”¨äºåˆ¤æ–­æ˜¯å¦æœ‰æ–°çš„äº§ç”Ÿå¼åŠ å…¥ 
 	while(flag){
 		flag=0;
-		int tm=J.rstr.size();	//µ±Ç°JµÄ´óĞ¡£¬±ÜÃâ´¦ÀíĞÂ¼ÓÈëµÄ²úÉúÊ½ 
+		int tm=J.rstr.size();	//å½“å‰Jçš„å¤§å°ï¼Œé¿å…å¤„ç†æ–°åŠ å…¥çš„äº§ç”Ÿå¼ 
 		for(int i=0;i<tm;i++){
 			int next_token;
-			if(J.idx[i]==J.rstr[i].size()-1){	//Èç¹ûÊÇ×îºóÒ»¸ö×Ö·û£¬²»ÓÃ¿¼ÂÇÁË 
+			if(J.idx[i]==J.rstr[i].size()-1){	//å¦‚æœæ˜¯æœ€åä¸€ä¸ªå­—ç¬¦ï¼Œä¸ç”¨è€ƒè™‘äº† 
 				continue;
 			}
 			else{
 				next_token=J.rstr[i][J.idx[i]+1]; 
 			}
-			//ÓëÍØ¹ãÎÄ·¨GÖĞµÄ²úÉúÊ½ÖğÒ»±È¶Ô 
+			//ä¸æ‹“å¹¿æ–‡æ³•Gä¸­çš„äº§ç”Ÿå¼é€ä¸€æ¯”å¯¹ 
 			for(int j=0;j<G.lstr.size();j++){
-				//ĞèÒª±£Ö¤²úÉúÊ½µÄ×ó²¿ÊÇnext_token£¬ÇÒ²úÉúÊ½µÄÎ»ÖÃÎª-1£¬ÇÒÃ»ÓĞ±»¹éÈëJÖĞ 
+				//éœ€è¦ä¿è¯äº§ç”Ÿå¼çš„å·¦éƒ¨æ˜¯next_tokenï¼Œä¸”äº§ç”Ÿå¼çš„ä½ç½®ä¸º-1ï¼Œä¸”æ²¡æœ‰è¢«å½’å…¥Jä¸­ 
 				if(G.lstr[j]==next_token&&G.idx[j]==-1&&judge(G.rstr[j],J)==0){
 					//cout<<"!";
 					J.lstr.push_back(next_token);
@@ -237,23 +237,23 @@ state transfer_function(state I,int next_token){
 } 
 
 void proC(){
-	//ÏÈ½¨Á¢²úÉúÊ½Start->S 
+	//å…ˆå»ºç«‹äº§ç”Ÿå¼Start->S 
 	state tI;tI.lstr.push_back(0);vector<int>tvec;tvec.push_back(1);tI.rstr.push_back(tvec);tI.idx.push_back(-1);
-	//Çó×î³õÊ¼µÄ±Õ°ü 
+	//æ±‚æœ€åˆå§‹çš„é—­åŒ… 
 	state I=closure(tI);
 	C.push_back(I);
-	//flag´ú±íÊÇ·ñÓĞĞÂµÄ×´Ì¬¼ÓÈë 
+	//flagä»£è¡¨æ˜¯å¦æœ‰æ–°çš„çŠ¶æ€åŠ å…¥ 
 	int flag=1;
 	while(flag){
 		flag=0;
-		/*ÎªÁËÃ¿´Î¶¼Ö»±éÀúµ½ÉÏ´ÎµÄ½á¹û£¬²»È¥´¦ÀíĞÂµÄ½á¹û£¬
-		Ã²ËÆÃ»Ê²Ã´´óÓÃ£¬µ«ÊµÔÚÀÁµÃÏëÁË */ 
+		/*ä¸ºäº†æ¯æ¬¡éƒ½åªéå†åˆ°ä¸Šæ¬¡çš„ç»“æœï¼Œä¸å»å¤„ç†æ–°çš„ç»“æœï¼Œ
+		è²Œä¼¼æ²¡ä»€ä¹ˆå¤§ç”¨ï¼Œä½†å®åœ¨æ‡’å¾—æƒ³äº† */ 
 		int tl=C.size();	
 		for(int i=0;i<tl;i++){
-			//»ñÈ¡ËùÓĞµÄÒÆ½øÏîÄ¿ 
+			//è·å–æ‰€æœ‰çš„ç§»è¿›é¡¹ç›® 
 			vector<int> vec=fc(C[i]);//cout<<vec.size()<<endl;
-			/*¶ÔÓÚÃ¿Ò»¸ö¿ÉÑ¡µÄtoken£¬¼ÆËã×ªÒÆº¯Êı
-			Èç¹û·Ç¿Õ»òÕßÃ»³öÏÖ¹ı£¬¾Í¼ÓÈëµ½ÏîÄ¿¼¯¹æ·¶×åÖĞ*/
+			/*å¯¹äºæ¯ä¸€ä¸ªå¯é€‰çš„tokenï¼Œè®¡ç®—è½¬ç§»å‡½æ•°
+			å¦‚æœéç©ºæˆ–è€…æ²¡å‡ºç°è¿‡ï¼Œå°±åŠ å…¥åˆ°é¡¹ç›®é›†è§„èŒƒæ—ä¸­*/
 			for(int j=0;j<vec.size();j++){
 				state newstate;//printstate(C[i]);cout<<vec[j]<<endl;
 				newstate=transfer_function(C[i],vec[j]);
@@ -269,26 +269,26 @@ void proC(){
 
 void ans_table_create(){
 	proC();
-	/*!!!!!!!rÎª¸º£¬SÎªÕı !!!!!!!*/
-	//±éÀúÏîÄ¿¼¯¹æ·¶×åÖĞÃ¿Ò»¸ö×´Ì¬ 
+	/*!!!!!!!rä¸ºè´Ÿï¼ŒSä¸ºæ­£ !!!!!!!*/
+	//éå†é¡¹ç›®é›†è§„èŒƒæ—ä¸­æ¯ä¸€ä¸ªçŠ¶æ€ 
 	for(int i=0;i<C.size();i++){
-		//¶ÔÃ¿Ò»¸ö×´Ì¬ÖĞµÄÃ¿Ò»¸ö²úÉúÊ½ 
+		//å¯¹æ¯ä¸€ä¸ªçŠ¶æ€ä¸­çš„æ¯ä¸€ä¸ªäº§ç”Ÿå¼ 
 		for(int j=0;j<C[i].idx.size();j++){
 			int tlstr=C[i].lstr[j],tidx=C[i].idx[j];
 			vector<int> trstr=C[i].rstr[j];
-			//²éÑ¯²úÉúÊ½µÄÀàĞÍ 
+			//æŸ¥è¯¢äº§ç”Ÿå¼çš„ç±»å‹ 
 			int next_token = judge_type(tlstr,trstr,tidx);
-			//Èç¹û¿É¼ÌĞøÒÆ½ø 
+			//å¦‚æœå¯ç»§ç»­ç§»è¿› 
 			if(next_token>=0){
-				//¼ÆËã×ªÒÆº¯Êı 
+				//è®¡ç®—è½¬ç§»å‡½æ•° 
 				state tmpstate=transfer_function(C[i],next_token);
-				//ÕÒµ½ĞèÒªÒÆ½ø×´Ì¬µÄÏÂ±ê 
+				//æ‰¾åˆ°éœ€è¦ç§»è¿›çŠ¶æ€çš„ä¸‹æ ‡ 
 				int ttidx=find_state_idx(tmpstate);
-				//Èç¹ûÕÒµ½ÁËÃ»ÓĞ²úÉú¹ıµÄ×´Ì¬£¬Ö±½Ó±¨´í 
+				//å¦‚æœæ‰¾åˆ°äº†æ²¡æœ‰äº§ç”Ÿè¿‡çš„çŠ¶æ€ï¼Œç›´æ¥æŠ¥é”™ 
 				if(ttidx==-1){
 					cout<<"error";return;
 				}
-				//Èç¹ûÏÂÒ»¸ötokenÊÇÖÕ½á·û£¬¾Í¼Óµ½action±íÖĞ£¬·ñÔò¼ÓÈëµ½go_to±íÖĞ 
+				//å¦‚æœä¸‹ä¸€ä¸ªtokenæ˜¯ç»ˆç»“ç¬¦ï¼Œå°±åŠ åˆ°actionè¡¨ä¸­ï¼Œå¦åˆ™åŠ å…¥åˆ°go_toè¡¨ä¸­ 
 				if(terminal[itoken[next_token]]){
 					action[i][next_token]=ttidx;
 				}
@@ -296,7 +296,7 @@ void ans_table_create(){
 					go_to[i][next_token]=ttidx;
 				}
 			}
-			//Èç¹ûÏîÄ¿²»¿ÉÒÆ½ø£¬²»¹ÜÓöµ½Ê²Ã´·ûºÅ¶¼Ö±½Ó¹æÔ¼ 
+			//å¦‚æœé¡¹ç›®ä¸å¯ç§»è¿›ï¼Œä¸ç®¡é‡åˆ°ä»€ä¹ˆç¬¦å·éƒ½ç›´æ¥è§„çº¦ 
 			if(next_token==-1){
 				int ttidx=-1*find_ans_idx(tlstr,trstr,tidx);
 				for(int k=0;k<T.size();k++){
@@ -304,7 +304,7 @@ void ans_table_create(){
 				}
 				action[i][token.size()]=ttidx;
 			}
-			//½áÊø 
+			//ç»“æŸ 
 			if(next_token==-2) action[i][token.size()]=acc; //acc 	
 		} 
 	}
@@ -314,7 +314,7 @@ void ans_table_create(){
 void compile_vision(){
 	for(int i=0;i<target_str.size();i++){
 		string tstr1,tstr2;
-		int flag=0;		//flagÓÃÓÚÅĞ¶¨ÊÇtokenÀàĞÍ»¹ÊÇ×Ö·ûÄÚÈİ 
+		int flag=0;		//flagç”¨äºåˆ¤å®šæ˜¯tokenç±»å‹è¿˜æ˜¯å­—ç¬¦å†…å®¹ 
 		for(int j=0;j<target_str[i].length();j++){
 			char tc=target_str[i][j];
 			if(tc==9){
@@ -329,11 +329,11 @@ void compile_vision(){
 //			int prt=tc;
 //			cout<<prt<<" "<<tc<<endl;
 		}
-		//·Ö±ğ¼ÓÈëµ½Óï¾äµÄ×é³É²¿·ÖÖĞ 
+		//åˆ†åˆ«åŠ å…¥åˆ°è¯­å¥çš„ç»„æˆéƒ¨åˆ†ä¸­ 
 		target.push_back(token[tstr1]);
 		target_component.push_back(tstr2);
 	}
-	//×îºó¼ÓÈë# 
+	//æœ€ååŠ å…¥# 
 	target.push_back(token.size());
 	target_component.push_back("#");	//!!!!!!!!!!!!!!
 }
@@ -342,39 +342,39 @@ void LR(){
 	ssta.push(0);xsta.push(token.size());
 	ip=0;
 	while(true){
-		//»ñÈ¡Õ»¶¥×´Ì¬ºÍÏÂÒ»¸ötoken 
+		//è·å–æ ˆé¡¶çŠ¶æ€å’Œä¸‹ä¸€ä¸ªtoken 
 		int s_top=ssta.top();
 		int token_a=target[ip];
-		//·ÖÎöÏÂÒ»²½µÄ¶¯×÷ 
+		//åˆ†æä¸‹ä¸€æ­¥çš„åŠ¨ä½œ 
 		int next_step=action[s_top][token_a];
 //		printstate(C[s_top]);
 //		cout<<s_top<<" "<<itoken[token_a]<<" "<<next_step<<endl;
-		//Èç¹ûÊÇÒÆ½ø 
+		//å¦‚æœæ˜¯ç§»è¿› 
 		if(next_step>0&&next_step!=999){
 			//cout<<target_component[ip]<<endl;
-			//ÅĞ¶Ïµ±Ç°×Ö·ûÊÇ·ñÓĞ±ØÒªÊä³ö£¬ÈôĞèÒªÓ¦Ñ¹Õ»±¸ÓÃ 
+			//åˆ¤æ–­å½“å‰å­—ç¬¦æ˜¯å¦æœ‰å¿…è¦è¾“å‡ºï¼Œè‹¥éœ€è¦åº”å‹æ ˆå¤‡ç”¨ 
 			if(need_output(itoken[target[ip]])) strsta.push(target_component[ip]);//cout<<"!";
-			//¸üĞÂ·ÖÎöÕ»£¬Ö¸ÕëÒÆ½ø 
+			//æ›´æ–°åˆ†ææ ˆï¼ŒæŒ‡é’ˆç§»è¿› 
 			xsta.push(target[ip]);ssta.push(next_step);ip++;
 		}
 		else if(next_step<0){
 			next_step*=-1;
-			vector<int> tstr=G.rstr[next_step];		//½ÓÏÂÀ´ÓÃÓÚ¹æÔ¼µÄ²úÉúÊ½ 
+			vector<int> tstr=G.rstr[next_step];		//æ¥ä¸‹æ¥ç”¨äºè§„çº¦çš„äº§ç”Ÿå¼ 
 			for(int i=0;i<tstr.size();i++) xsta.pop(),ssta.pop();
 			int n_state=ssta.top();
-			//¸üĞÂ·ÖÎöÕ» 
+			//æ›´æ–°åˆ†ææ ˆ 
 			xsta.push(G.lstr[next_step]);
 			ssta.push(go_to[n_state][G.lstr[next_step]]);
-			//Êä³ö²úÉúÊ½ 
+			//è¾“å‡ºäº§ç”Ÿå¼ 
 			cout<<itoken[G.lstr[next_step]]<<"-> ";
 			for(int i=0;i<tstr.size();i++){
 				cout<<itoken[tstr[i]]<<" ";
 			}
-			//Èç¹ûÓĞÖÕ½á·ûĞèÒªÊä³ö£¬¾Íµ¯Õ» 
+			//å¦‚æœæœ‰ç»ˆç»“ç¬¦éœ€è¦è¾“å‡ºï¼Œå°±å¼¹æ ˆ 
 			if(need_output(itoken[tstr[0]])) cout<<strsta.top(),strsta.pop();
 			cout<<endl;
 		}
-		//½áÊø 
+		//ç»“æŸ 
 		else if(next_step==999){
 			return;
 		}
@@ -398,7 +398,7 @@ int main(){
 //	for(int i=0;i<target_component.size();i++) cout<<target_component[i]<<" ";
 	
 	
-//	·ÖÎö±ídebug 
+//	åˆ†æè¡¨debug 
 //	for(int i=0;i<C.size();i++){
 //		cout<<"state"<<i<<endl; 
 //		printstate(C[i]);cout<<endl;
@@ -424,13 +424,13 @@ int main(){
 	
 	
 	
-//  ÏîÄ¿¼¯¹æ·¶×ådebug
+//  é¡¹ç›®é›†è§„èŒƒæ—debug
 //	proC();
 //	for(int i=0;i<C.size();i++){
 //		printstate(C[i]);cout<<endl;
 //	} 
 
-//  ×ªÒÆº¯Êıdebug
+//  è½¬ç§»å‡½æ•°debug
 //	state test;
 //	test.lstr.push_back(0);vector<int> tvec1;tvec1.push_back(1);test.rstr.push_back(tvec1);test.idx.push_back(-1);
 //	test.lstr.push_back(2);vector<int> tvec2;tvec2.push_back(3);tvec2.push_back(2);test.rstr.push_back(tvec2);test.idx.push_back(0);
@@ -449,7 +449,7 @@ int main(){
 
 
 
-//  ±Õ°üdebug	
+//  é—­åŒ…debug	
 //	state test;
 //	test.lstr.push_back(2);
 //	vector<int> tvec;
@@ -473,7 +473,7 @@ int main(){
 //		cout<<"  "<<res.idx[i]<<endl;
 //	}
 
-//  Ô¤´¦Àídebug 
+//  é¢„å¤„ç†debug 
 //	for(int i=0;i<G.idx.size();i++){
 //		cout<<i<<" "<<itoken[G.lstr[i]]<<"   ";
 //		for(int j=0;j<G.rstr[i].size();j++) cout<<itoken[G.rstr[i][j]]<<" ";

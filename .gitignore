@@ -9,3 +9,10 @@ task2t/parser.tab.h
 task2t/parser.tab.o
 task2t/scanner.c
 task2t/scanner.o
+task3/parser.output
+task3/parser.tab.c
+task3/parser.tab.h
+task3/parser.tab.o
+task3/scanner.c
+task3/scanner.o
+task3/in1.txt

@@ -61,8 +61,8 @@ char* itoa(int num,char *str);
 char* ftoa(float num,char *str);
 char* fotoa(char *p);
 char* fhtoa(char *p);
-void myprint(int c){
-	FILE* fp=fopen("chart.txt","a");
+void myprint(int c,FILE* fp){
+	//FILE* fp=fopen("chart.txt","a");
 	switch(c){
 		case FUHAO:printf("%s\t\t_\n",yytext);fprintf(fp,"%s\t\t_\n",yytext);break;
 		case IDN:printf("IDN\t\t%s\n",yytext);fprintf(fp,"IDN\t\t%s\n",yytext);break;
@@ -78,14 +78,16 @@ void myprint(int c){
 		case ELSE:printf("ELSE\t\t_\n");fprintf(fp,"ELSE\t\t_\n");break;
 		case DO:printf("DO\t\t_\n");fprintf(fp,"DO\t\t_\n");break;
 	}
-    fclose(fp);
+    //fclose(fp);
 }
 
 int main(void){
 	yyin=fopen("in.txt","r");
 	int c;
+
+    FILE* fp=fopen("chart.txt","w");
 	while (c = yylex()){
-		myprint(c);
+		myprint(c,fp);
 	}
 	return 0;
 }

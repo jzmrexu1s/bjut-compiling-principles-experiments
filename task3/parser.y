@@ -38,7 +38,6 @@ char *gen_str[100];
 %}
 
 %debug
-
 %locations
 %union {
     int intval;
@@ -84,7 +83,10 @@ S: IDN '=' E            { $$ = createAstNodeIdn(4, $1, NULL, $3, NULL); gen($$,'
  | IDN '=' error E      { yyerrok; }
  | IDN error            { yyerrok; }
  | error '=' error      { yyerrok; }
- | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); backpatch($2->truelist,$4); $$->nextlist=merge($2->falselist,$5->nextlist); if($5->type==6)  backpatch($2->falselist,$5->quad);}
+ | IF C THEN M SP       { $$ = createAstNode(5, $2, NULL, $5); 
+                          backpatch($2->truelist,$4); 
+                          $$->nextlist=merge($2->falselist,$5->nextlist); 
+                          if($5->type==6)  backpatch($2->falselist,$5->quad);}
  | IF error C THEN SP    { yyerrok; }
  | IF C error THEN SP    { yyerrok; }
  | IF C THEN error SP    { yyerrok; }
@@ -106,8 +108,12 @@ SP: S           { $$ = createAstNode(8, NULL, $1, NULL); $$->nextlist=$1->nextli
   | S M ELSE M S    { $$ = createAstNode(9, $1, NULL, $5); gen(NULL,'0',NULL,NULL,9); $$->nextlist=merge(makelist($2),$5->nextlist); $$->quad=$4; $$->type=6; }
   ;
 
-C: E CP         { $$ = createAstNode(10, $1, NULL, $2); $$ -> truelist = makelist(nextquad); $$ -> falselist = makelist(nextquad+1);
-                  gen(NULL,$2->relop,$1,$2,1); gen(NULL,'0',NULL,NULL,9); }
+C: E CP         { $$ = createAstNode(10, $1, NULL, $2); 
+                  $$ -> truelist = makelist(nextquad); 
+                  $$ -> falselist = makelist(nextquad+1);
+                  gen(NULL,$2->relop,$1,$2,1); 
+                  gen(NULL,'0',NULL,NULL,9); }
+
  | E error CP   { yyerrok; }
  | error CP     { yyerrok; }
   
@@ -192,7 +198,7 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
     sprintf(GEN," := ");
     if(op=='='){
       pplace(arg1);
-    }else{
+    }else{{ $$ = createAstNode(9, $1, NULL, $5); gen(NULL,'0',NULL,NULL,9); $$->next
       pplace(arg1);
       sprintf(GEN,"%c",op);
       pplace(arg2);
@@ -212,11 +218,8 @@ void gen(struct astNode* result,char op,struct astNode* arg1,struct astNode* arg
 }
 
 void backpatch(struct listNode* p,int quad){
-    //char tmp[4];
-    //itoa(quad,tmp+startquad,10);
     while(p){
         sprintf(gen_str[p->quad]+strlen(gen_str[p->quad]),"%d",quad+startquad);
-        //strcat(gen_str[p->quad],tmp);
         p=p->next;
     }
 }

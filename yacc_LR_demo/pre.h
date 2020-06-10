@@ -9,9 +9,9 @@
 using namespace std;
 
 struct state{
-	vector<int> lstr;					//²úÉúÊ½×ó²¿ 
-	vector<vector<int> > rstr; 			//²úÉúÊ½ÓÒ²¿ 
-	vector<int> idx;					//¶ÔÓ¦.µÄÏÂ±ê 
+	vector<int> lstr;					//äº§ç”Ÿå¼å·¦éƒ¨ 
+	vector<vector<int> > rstr; 			//äº§ç”Ÿå¼å³éƒ¨ 
+	vector<int> idx;					//å¯¹åº”.çš„ä¸‹æ ‡ 
 } G0;
 
 map<string,int> token0;
@@ -23,11 +23,11 @@ vector<string> target_str;
 
 void read_token(string file){
 	ifstream infile; 
-    infile.open(file.data());   //½«ÎÄ¼şÁ÷¶ÔÏóÓëÎÄ¼şÁ¬½ÓÆğÀ´ 
-    assert(infile.is_open());   //ÈôÊ§°Ü,ÔòÊä³ö´íÎóÏûÏ¢,²¢ÖÕÖ¹³ÌĞòÔËĞĞ 
+    infile.open(file.data());   //å°†æ–‡ä»¶æµå¯¹è±¡ä¸æ–‡ä»¶è¿æ¥èµ·æ¥ 
+    assert(infile.is_open());   //è‹¥å¤±è´¥,åˆ™è¾“å‡ºé”™è¯¯æ¶ˆæ¯,å¹¶ç»ˆæ­¢ç¨‹åºè¿è¡Œ 
     string s;
     int cnt=0,flag=0;
-    //¹¹½¨token±í 
+    //æ„å»ºtokenè¡¨ 
     token0["Start"]=0;terminal["Start"]=0;
     itoken0[0] = "Start";
     V.push_back("Start");
@@ -42,14 +42,14 @@ void read_token(string file){
     	token0[s]=++cnt;
     	itoken0[cnt] = s;
     }
-    infile.close();             //¹Ø±ÕÎÄ¼şÊäÈëÁ÷ 
+    infile.close();             //å…³é—­æ–‡ä»¶è¾“å…¥æµ 
 }
 
 void read_production(string file)
 {	
     ifstream infile; 
-    infile.open(file.data());   //½«ÎÄ¼şÁ÷¶ÔÏóÓëÎÄ¼şÁ¬½ÓÆğÀ´ 
-    assert(infile.is_open());   //ÈôÊ§°Ü,ÔòÊä³ö´íÎóÏûÏ¢,²¢ÖÕÖ¹³ÌĞòÔËĞĞ 
+    infile.open(file.data());   //å°†æ–‡ä»¶æµå¯¹è±¡ä¸æ–‡ä»¶è¿æ¥èµ·æ¥ 
+    assert(infile.is_open());   //è‹¥å¤±è´¥,åˆ™è¾“å‡ºé”™è¯¯æ¶ˆæ¯,å¹¶ç»ˆæ­¢ç¨‹åºè¿è¡Œ 
     string s;
     int flag=0;
     while(getline(infile,s))
@@ -59,7 +59,7 @@ void read_production(string file)
 		string rtmp=s.substr(pos+2);
 		string tmpstr="";
 		vector<int> vec;
-		//¸ù¾İtoken±íÊ¶±ğ 
+		//æ ¹æ®tokenè¡¨è¯†åˆ« 
 		for(int i=0;i<rtmp.length();i++){
 			if(rtmp[i]==' ') continue;
 			tmpstr+=rtmp[i];
@@ -75,25 +75,25 @@ void read_production(string file)
 			G0.lstr.push_back(0);G0.rstr.push_back(fvec);G0.idx.push_back(0);
 			flag=1;
 		}
-		//½«¸÷²úÉúÊ½¼ÓÈëÍØ¹ãÎÄ·¨ 
+		//å°†å„äº§ç”Ÿå¼åŠ å…¥æ‹“å¹¿æ–‡æ³• 
 		for(int i=0;i<=vec.size();i++){
 			G0.lstr.push_back(token0[ltmp]);
 			G0.rstr.push_back(vec);
 			G0.idx.push_back(i-1);
 		}
     }
-    infile.close();             //¹Ø±ÕÎÄ¼şÊäÈëÁ÷ 
+    infile.close();             //å…³é—­æ–‡ä»¶è¾“å…¥æµ 
 }
 
 void read_string(string file){
 	ifstream infile; 
-    infile.open(file.data());   //½«ÎÄ¼şÁ÷¶ÔÏóÓëÎÄ¼şÁ¬½ÓÆğÀ´ 
-    assert(infile.is_open());   //ÈôÊ§°Ü,ÔòÊä³ö´íÎóÏûÏ¢,²¢ÖÕÖ¹³ÌĞòÔËĞĞ 
+    infile.open(file.data());   //å°†æ–‡ä»¶æµå¯¹è±¡ä¸æ–‡ä»¶è¿æ¥èµ·æ¥ 
+    assert(infile.is_open());   //è‹¥å¤±è´¥,åˆ™è¾“å‡ºé”™è¯¯æ¶ˆæ¯,å¹¶ç»ˆæ­¢ç¨‹åºè¿è¡Œ 
     string s;
     while(getline(infile,s)){
     	target_str.push_back(s);
 	}
-    infile.close();             //¹Ø±ÕÎÄ¼şÊäÈëÁ÷ 
+    infile.close();             //å…³é—­æ–‡ä»¶è¾“å…¥æµ 
 }
 
 
